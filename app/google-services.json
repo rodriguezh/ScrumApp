@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "215798841748",
+    "firebase_url": "https://scrum-task-project.firebaseio.com",
+    "project_id": "scrum-task-project",
+    "storage_bucket": "scrum-task-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215798841748:android:9995ccb42e1fafb0",
+        "android_client_info": {
+          "package_name": "app.com.scrumapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215798841748-oqd4s9v5rql1h0k92335r6urbtpllrmj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0TzIMPBSm_Ckjlkitz-qHECZUVNzekbw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
