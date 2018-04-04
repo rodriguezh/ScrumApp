@@ -1,18 +1,25 @@
 package app.com.scrumapp.activities.historiausuario;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,25 +31,32 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.models.HistoriadeUsuario;
+import app.com.scrumapp.models.Usuario;
+import app.com.scrumapp.utils.Util;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class HistoriaUsuarioActivity extends AppCompatActivity implements HistoriaUsuarioContract.View {
-    private RecyclerView huRecyclerView;
-    private DatabaseReference mFirebaseDatabaseReference;
 
     private HistoriaUsuarioContract.Presenter mPresenter;
-
-    private LinearLayoutManager mLinearLayoutManager;
-    private FirebaseRecyclerAdapter<HistoriadeUsuario,MessageViewHolder> mFirebaseAdapter;
-    EditText edtIdHu,edtDescripcion,edtCriterios;
-    TextView txtPrioridad, txtEsfuerzo;
+    EditText edtDescripcion,edtCriteriosAceptacion,edtinfAdicional,edtMotivoCandelacion;
+    Chronometer chronometer;
+    Button btnInciar,btnDetener,btnFinalizarTarea,btnCancelarTarea;
+    TextView txtNoHU, txtProyecto,txtSprint,txtEstado,txtEsfuerzo,txtPrioridad,txtFechaInicio,txtFechaFin;
+    private Spinner spinnerUsers;
+    private int keyHistoriaUsuario;
+    private Usuario usuario;
+    private String fechaInicial;
+    private int tipoForm;
+    private LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,83 +64,81 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-         edtIdHu=(EditText)findViewById(R.id.edtIdHU);
-         edtDescripcion=(EditText)findViewById(R.id.edtDescripcion);
-         edtCriterios=(EditText)findViewById(R.id.edtCriterios);
-         txtEsfuerzo=(TextView)findViewById(R.id.tVEsfuerzo);
-         txtPrioridad=(TextView)findViewById(R.id.tVPrioridad);
+       txtNoHU=(TextView)findViewById(R.id.txtNoHU);
+       txtProyecto=(TextView)findViewById(R.id.txtProyecto);
+       txtSprint=(TextView)findViewById(R.id.txtSprint);
+       txtEstado=(TextView)findViewById(R.id.txtEstado);
+       txtEsfuerzo=(TextView)findViewById(R.id.txtEsfuerzo);
+       txtPrioridad=(TextView)findViewById(R.id.txtPrioridad);
+       txtFechaInicio=(TextView)findViewById(R.id.txtFechaInicio);
+       txtFechaFin=(TextView)findViewById(R.id.txtFechaFin);
+       edtDescripcion=(EditText)findViewById(R.id.edtDescripcion);
+       edtCriteriosAceptacion=(EditText)findViewById(R.id.edtCriteriosAceptacion);
+       edtinfAdicional=(EditText)findViewById(R.id.edtinfAdicional);
+       edtMotivoCandelacion=(EditText)findViewById(R.id.edtMotivoCandelacion);
+       btnInciar=(Button)findViewById(R.id.btnInciar);
+       btnDetener=(Button)findViewById(R.id.btnDetener);
+       btnFinalizarTarea=(Button)findViewById(R.id.btnFinalizarTarea);
+       btnCancelarTarea=(Button)findViewById(R.id.btnCancelarTarea);
+       chronometer=(Chronometer)findViewById(R.id.chronometer);
+       spinnerUsers = (Spinner) findViewById(R.id.spinnerUsuario);
+       linearLayout=(LinearLayout)findViewById(R.id.linearControl);
+       btnInciar.setOnClickListener(mStartListener);
+       btnDetener.setOnClickListener(mStopListener);
+       btnCancelarTarea.setOnClickListener(mCancelarHU);
+       btnFinalizarTarea.setOnClickListener(mFinalizarHU);
+       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Bundle bundle = getIntent().getExtras();
+       Bundle bundle = getIntent().getExtras();
 
         if(bundle.getString(Constants.IDHU)!= null){
-           Log.e("---->IDHU",bundle.getString(Constants.IDHU));
+            mPresenter = new HistoriaUsuarioPresenter(this,bundle.getString(Constants.IDHU));
         }
-        mPresenter = new HistoriaUsuarioPresenter(this,bundle.getString(Constants.IDHU));
 
+        if (bundle.getInt(Constants.FORMTYPE)==Constants.FORMASSIGN){
+            tipoForm=Constants.FORMASSIGN;
+        }else{
+            tipoForm=Constants.FORMUPDATE;
+            spinnerUsers.setEnabled(false);
+            edtCriteriosAceptacion.setFocusable(false);
+            edtDescripcion.setFocusable(false);
+            linearLayout.setVisibility(View.VISIBLE);
+        }
 
-       // huRecyclerView = (RecyclerView)findViewById(R.id.huRecyclerView);
-
-       // mLinearLayoutManager = new LinearLayoutManager(this);
-
-        //huRecyclerView.setLayoutManager(mLinearLayoutManager);
-
-      /*  mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<HistoriadeUsuario,
-                MessageViewHolder>(
-                HistoriadeUsuario.class,
-                R.layout.item_message,
-                MessageViewHolder.class,
-                mFirebaseDatabaseReference.child("HistoriasdeUsuario")) {
-
-            @Override
-            protected HistoriadeUsuario parseSnapshot(DataSnapshot snapshot) {
-                HistoriadeUsuario friendlyMessage = super.parseSnapshot(snapshot);
-                if (friendlyMessage != null) {
-                    friendlyMessage.set_id(snapshot.getKey());
-                }
-                return friendlyMessage;
-            }
-
-            @Override
-            protected void populateViewHolder(MessageViewHolder viewHolder,
-                                              final HistoriadeUsuario friendlyMessage, int position) {
-               viewHolder.messengerTextView.setText(friendlyMessage.getDescripcion());
-                 viewHolder.messageTextView.setText(friendlyMessage.getCriteriosAceptacion());
-                //Toast.makeText(getApplicationContext(),"Cambio realizado", Toast.LENGTH_SHORT).show();
-
-
-
-            }
-
-        };
-
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                int friendlyMessageCount = mFirebaseAdapter.getItemCount();
-                int lastVisiblePosition =
-                        mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
-                // If the recycler view is initially being loaded or the
-                // user is at the bottom of the list, scroll to the bottom
-                // of the list to show the newly added MESSAGE.
-
-                if (lastVisiblePosition == -1 ||
-                        (positionStart >= (friendlyMessageCount - 1) &&
-                                lastVisiblePosition == (positionStart - 1))) {
-                huRecyclerView.scrollToPosition(positionStart);
-                }
-            }
-        });
-
-        huRecyclerView.setLayoutManager(mLinearLayoutManager);
-        huRecyclerView.setAdapter(mFirebaseAdapter);*/
 
     }
+
+
+    View.OnClickListener mStartListener = new View.OnClickListener() {
+        public void onClick(View v) {
+           mPresenter.saveUserHistory( actualizarHU(Constants.DOING));
+            chronometer.start();
+        }
+    };
+
+    View.OnClickListener mStopListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            mPresenter.saveUserHistory(actualizarHU(Constants.STOP));
+            chronometer.stop();
+        }
+    };
+
+
+    View.OnClickListener mCancelarHU = new View.OnClickListener() {
+        public void onClick(View v) {
+            mPresenter.saveUserHistory(actualizarHU(Constants.CANCEL));
+            chronometer.stop();
+        }
+    };
+
+    View.OnClickListener mFinalizarHU = new View.OnClickListener() {
+        public void onClick(View v) {
+            mPresenter.saveUserHistory(actualizarHU(Constants.DONE));
+            chronometer.stop();
+
+        }
+    };
 
     @Override
     protected void onPostResume() {
@@ -134,52 +146,6 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
         mPresenter.start();
     }
 
-    private void saveHU(String idHU, String descripcion, String criteriosAceptacion){
-
-        String key = mFirebaseDatabaseReference.child("HistoriasdeUsuario").push().getKey();
-        HistoriadeUsuario friendlyMessage= new HistoriadeUsuario(idHU,descripcion,criteriosAceptacion);
-        Map<String, Object> postValues = friendlyMessage.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-
-        //childUpdates.put("/chats/" + key, postValues);
-        childUpdates.put("/HistoriasdeUsuario/"+key, postValues);
-
-        mFirebaseDatabaseReference.updateChildren(childUpdates);
-    }
-
-//postref: mFirebaseDatabaseReference.child("/HistoriasdeUsuario/"+key)
-    private void updateHU(DatabaseReference postRef, final String criterio, final String descripcion) {
-        postRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                HistoriadeUsuario p = mutableData.getValue(HistoriadeUsuario.class);
-                if (p == null) {
-                    return Transaction.success(mutableData);
-                }
-                p.setCriteriosAceptacion(criterio);
-                p.setDescripcion(p.getDescripcion()+" "+descripcion);
-
-                // Set value and report transaction success
-                mutableData.setValue(p);
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                // Transaction completed
-                // Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-            }
-        });
-    }
-
-    private void deleteHU(String key){
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/HistoriasdeUsuario/" + key, null);
-
-        mFirebaseDatabaseReference.updateChildren(childUpdates);
-    }
 
     @Override
     public void setPresenter(HistoriaUsuarioContract.Presenter presenter) {
@@ -188,31 +154,37 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     @Override
     public void loadView(HistoriadeUsuario hu) {
-        edtIdHu.setText(hu.getIdHU());
+        keyHistoriaUsuario=hu.getId();
+        txtNoHU.setText(hu.getId_hu()+"");
+        txtProyecto.setText(hu.getId_proyecto()+"");
+        txtSprint.setText(hu.getId_sprint()+"");
+        txtEstado.setText(hu.getEstado());
+        txtEsfuerzo.setText("Esfuerzo: "+hu.getEsfuerzo());
+        txtPrioridad.setText("Prioridad: "+hu.getPrioridad());
+        txtFechaInicio.setText(hu.getFechaInicio());
+        txtFechaFin.setText(hu.getFechaFin());
         edtDescripcion.setText(hu.getDescripcion());
-        edtCriterios.setText(hu.getCriteriosAceptacion());
-        txtEsfuerzo.setText(hu.getPeso()+"");
-        txtPrioridad.setText(hu.getPrioridad()+"");
+        edtCriteriosAceptacion.setText(hu.getCriterio_aceptacion());
+        edtinfAdicional.setText(hu.getInformacionadicional());
+        edtMotivoCandelacion.setText(hu.getMotivocancelacion());
+        usuario=hu.getDesarrollador();
+        fechaInicial=hu.getFechaInicio();
     }
 
     @Override
     public void showInfoMessage(String respuesta) {
-
+        Toast.makeText(this,respuesta,Toast.LENGTH_LONG).show();
     }
 
-    public static class MessageViewHolder extends RecyclerView.ViewHolder {
-        public TextView messageTextView;
-        public TextView messengerTextView;
-        public TextView txtBadge;
-        public LinearLayout linearMessage;
+    @Override
+    public void setSpinnerUser(ArrayList<Usuario> usuarios) {
+        ArrayAdapter<Usuario> adapter= new ArrayAdapter<Usuario>(this,R.layout.support_simple_spinner_dropdown_item, usuarios);
+        spinnerUsers.setAdapter(adapter);
+    }
 
-        public MessageViewHolder(View v) {
-            super(v);
-            messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
-            messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
-            linearMessage=(LinearLayout)itemView.findViewById(R.id.linearMessage);
-            txtBadge = (TextView)itemView.findViewById(R.id.badge_notification);
-        }
+    @Override
+    public void setTimeChronometer(int min, int seg) {
+        chronometer.setBase(SystemClock.elapsedRealtime() - (min * 60000 + seg * 1000));
     }
 
     @Override
@@ -227,17 +199,50 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
         return super.onSupportNavigateUp();
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.navigation_save:
-              /*  mPresenter.updateUser(edtNombreUsuario.getText().toString(),
-                        edtEstudios.getText().toString(),edtPublicaciones.getText().toString(),
-                        edtExperiencias.getText().toString());*/
-                break;
+                if(tipoForm==Constants.FORMASSIGN){
+                    mPresenter.saveUserHistory(asignar());
+                }else{
+                    mPresenter.saveUserHistory(actualizarHU(""));
+                }
+               break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private HistoriadeUsuario asignar(){
+        HistoriadeUsuario hu = new HistoriadeUsuario();
+        hu.setId(keyHistoriaUsuario);
+        hu.setEstado(Constants.TODO);
+        hu.setAsignada(true);
+        hu.setDesarrollador((Usuario)spinnerUsers.getSelectedItem());
+        return hu;
+    }
+
+    private HistoriadeUsuario actualizarHU(String estado){
+
+        HistoriadeUsuario hu = new HistoriadeUsuario();
+        hu.setId(keyHistoriaUsuario);
+        hu.setInformacionadicional(edtinfAdicional.getText().toString());
+        hu.setTiempoTranscurrido(chronometer.getText().toString());
+        hu.setDesarrollador((Usuario)spinnerUsers.getSelectedItem());
+        if(fechaInicial==null){
+            hu.setFechaInicio(Util.formatFechaActual());
+        }else{
+            hu.setFechaInicio(txtFechaInicio.getText().toString());
+        }
+        hu.setAsignada(true);
+       if(estado.length()>0){ 
+           hu.setEstado(estado);
+       }
+        if(estado.equals(Constants.DONE) || estado.equals(Constants.CANCEL)){
+            hu.setFechaFin(Util.formatFechaActual());
+            hu.setMotivocancelacion(edtMotivoCandelacion.getText().toString());
+        }
+        return hu;
     }
 
 }

@@ -2,23 +2,20 @@ package app.com.scrumapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import app.com.scrumapp.adapters.MyHistoriaUsuarioRecyclerViewAdapter;
 import app.com.scrumapp.R;
-
+import app.com.scrumapp.adapters.MyHUAsignadasRecyclerViewAdapter;
 import app.com.scrumapp.models.HistoriadeUsuario;
 
 /**
@@ -27,7 +24,7 @@ import app.com.scrumapp.models.HistoriadeUsuario;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HUInicialFragment extends Fragment {
+public class HUAsignadasFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -36,19 +33,19 @@ public class HUInicialFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private DatabaseReference mFirebaseDatabaseReference;
     private RecyclerView recyclerView;
-    private MyHistoriaUsuarioRecyclerViewAdapter adapter;
+    private MyHUAsignadasRecyclerViewAdapter adapter;
     private LinearLayoutManager mLinearLayoutManager;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public HUInicialFragment() {
+    public HUAsignadasFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static HUInicialFragment newInstance(int columnCount) {
-        HUInicialFragment fragment = new HUInicialFragment();
+    public static HUAsignadasFragment newInstance(int columnCount) {
+        HUAsignadasFragment fragment = new HUAsignadasFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -62,44 +59,29 @@ public class HUInicialFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-
-
-
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_historiausuario_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_historiadeusuario_list, container, false);
 
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            mLinearLayoutManager = new LinearLayoutManager(context);
-            recyclerView.setLayoutManager(mLinearLayoutManager);
-            mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        // Set the adapter
+        Context context = view.getContext();
+        recyclerView = (RecyclerView) view;
+        mLinearLayoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(mLinearLayoutManager);
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-            FirebaseRecyclerOptions<HistoriadeUsuario> options =
-                    new FirebaseRecyclerOptions.Builder<HistoriadeUsuario>()
-                            .setQuery(mFirebaseDatabaseReference.child("HistoriadeUsuario").orderByChild("asignada").equalTo(false), HistoriadeUsuario.class)
-                            .build();
+        FirebaseRecyclerOptions<HistoriadeUsuario> options =
+                new FirebaseRecyclerOptions.Builder<HistoriadeUsuario>()
+                        .setQuery(mFirebaseDatabaseReference.child("HistoriadeUsuario").orderByChild("asignada").equalTo(true), HistoriadeUsuario.class)
+                        .build();
 
-            adapter=new MyHistoriaUsuarioRecyclerViewAdapter( options, mListener);
-
-
-            recyclerView.setAdapter(adapter);
+        adapter=new MyHUAsignadasRecyclerViewAdapter( options, mListener);
 
 
-        }
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
@@ -114,14 +96,12 @@ public class HUInicialFragment extends Fragment {
         super.onStop();
         adapter.startListening();
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
-
         }
     }
 

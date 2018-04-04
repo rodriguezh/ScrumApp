@@ -8,162 +8,281 @@
     tools:context="app.com.scrumapp.activities.historiausuario.HistoriaUsuarioActivity"
     tools:showIn="@layout/activity_historia_usuario">
 
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/edtIdHU"
-            android:layout_width="333dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:hint="idHU"
-            android:text="Historia de usuario" />
-
-        <TableRow
-            android:layout_width="331dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:id="@+id/tVEsfuerzo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:layout_weight="1"
-                android:text="Esfuerzo" />
-
-            <TextView
-                android:id="@+id/tVPrioridad"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:layout_weight="1"
-                android:text="Prioridad" />
-
-            <Chronometer
-                android:id="@+id/cronometro"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:layout_weight="1" />
-
-        </TableRow>
-
-        <Spinner
-            android:id="@+id/asignar_usuario"
-            android:layout_width="332dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp" />
-
-        <EditText
-            android:id="@+id/edtDescripcion"
-            android:layout_width="330dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:hint="Descripcion" />
-
-        <EditText
-            android:id="@+id/edtCriterios"
-            android:layout_width="329dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:hint="Criterios de aceptacion" />
-
-        <TableRow
-            android:id="@+id/tbrControles"
-            android:layout_width="330dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp">
-
-            <Button
-                android:id="@+id/btCancelarHis"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_margin="10dp"
-                android:text="CANCELAR"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="12dp"
-                android:layout_height="36dp" />
-
-            <Button
-                android:id="@+id/btIniciarHis"
-                android:layout_width="76dp"
-                android:layout_height="38dp"
-                android:layout_margin="10dp"
-                android:text="INICIAR"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="16dp"
-                android:layout_height="45dp" />
-
-            <Button
-                android:id="@+id/btPausaHis"
-                android:layout_width="74dp"
-                android:layout_height="36dp"
-                android:layout_margin="10dp"
-                android:text="Pausar"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-        </TableRow>
-
-    </LinearLayout>
-
-
-    <!--<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true">
     <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Historia de Usuario"/>
+            <TextView
+                android:id="@+id/txtNoHU"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="1"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Proyecto"/>
+            <TextView
+                android:id="@+id/txtProyecto"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Sprint"/>
+            <TextView
+                android:id="@+id/txtSprint"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:text="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Asiganada a:"/>
+            <Spinner
+                android:id="@+id/spinnerUsuario"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+            </Spinner>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Estado"/>
+            <TextView
+                android:id="@+id/txtEstado"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:text="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txtEsfuerzo"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Esfuerzo"/>
+            <TextView
+                android:id="@+id/txtPrioridad"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="Prioridad"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripcion"/>
+            <EditText
+                android:id="@+id/edtDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="top|start"
+                android:maxLines="3"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        </LinearLayout>
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <EditText
-            android:id="@+id/edtIdHU"
-            android:hint="idHU"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/edtDescripcion"
-            android:hint="descripcion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/edtCriterios"
-            android:hint="Criterios de aceptacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Listado Historias"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/huRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Criterios de Aceptación"/>
+            <EditText
+                android:id="@+id/edtCriteriosAceptacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top|start"
+                android:maxLines="3"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-        />
-</LinearLayout>-->
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearControl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Informacion Adicional"/>
+            <EditText
+                android:id="@+id/edtinfAdicional"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top|start"
+                android:maxLines="3"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearCancelacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Motivo Cancelacion"/>
+            <EditText
+                android:id="@+id/edtMotivoCandelacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top|start"
+                android:maxLines="3"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Fecha Inicio"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="Fecha fin"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txtFechaInicio"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Fecha Inicio"/>
+            <TextView
+                android:id="@+id/txtFechaFin"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="Fecha fin"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btnInciar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Iniciar"/>
+            <Button
+                android:id="@+id/btnDetener"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Detener"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/btnFinalizarTarea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Finalizar Tarea"/>
+        <Button
+            android:id="@+id/btnCancelarTarea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancelar Tarea"/>
+        </LinearLayout>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"></View>
+    </LinearLayout>
+    </ScrollView>
+
+
 </android.support.constraint.ConstraintLayout>

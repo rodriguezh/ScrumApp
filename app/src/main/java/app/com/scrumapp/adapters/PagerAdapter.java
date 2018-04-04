@@ -4,8 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import app.com.scrumapp.fragments.HUAsignadasFragment;
 import app.com.scrumapp.fragments.HUInicialFragment;
-import app.com.scrumapp.fragments.HistoryFragment;
+
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
@@ -23,7 +24,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
            case 0:
                return new HUInicialFragment();
            case 1:
-               return new HistoryFragment();
+               return new HUAsignadasFragment();
            default:
                return null;
        }

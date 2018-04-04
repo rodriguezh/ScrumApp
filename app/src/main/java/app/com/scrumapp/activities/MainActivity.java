@@ -29,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
+
         //crea el tab layout y agrega el número de tabs con sus títulos
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Proyectos"));
-        tabLayout.addTab(tabLayout.newTab().setText("Historias"));
+        tabLayout.addTab(tabLayout.newTab().setText("Sin Asignar"));
+        tabLayout.addTab(tabLayout.newTab().setText("Asignadas"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //crea el adaptador y lo que debe hacer en cada tab

@@ -10,84 +10,30 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.activities.historiausuario.HistoriaUsuarioActivity;
-import app.com.scrumapp.fragments.HUInicialFragment.OnListFragmentInteractionListener;
-
+import app.com.scrumapp.fragments.HUAsignadasFragment.OnListFragmentInteractionListener;
 import app.com.scrumapp.models.HistoriadeUsuario;
+
+
+import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyHistoriaUsuarioRecyclerViewAdapter extends FirebaseRecyclerAdapter<HistoriadeUsuario,MyHistoriaUsuarioRecyclerViewAdapter.ViewHolder> {
+public class MyHUAsignadasRecyclerViewAdapter extends FirebaseRecyclerAdapter<HistoriadeUsuario,MyHUAsignadasRecyclerViewAdapter.ViewHolder> {
 
     private final OnListFragmentInteractionListener mListener;
-    public MyHistoriaUsuarioRecyclerViewAdapter(FirebaseRecyclerOptions<HistoriadeUsuario>  options,  OnListFragmentInteractionListener mListener) {
+    public MyHUAsignadasRecyclerViewAdapter(FirebaseRecyclerOptions<HistoriadeUsuario> options, OnListFragmentInteractionListener mListener) {
         super(options);
         //modelClass, modelLayout, viewHolderClass, ref
         this.mListener = mListener;
     }
 
-   /* private final List<HistoriadeUsuario> mValues;
-    private final OnListFragmentInteractionListener mListener;
-
-   /* public MyHistoriaUsuarioRecyclerViewAdapter(List<HistoriadeUsuario> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
-    }*/
-
-    /*@Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_historiausuario, parent, false);
-        return new ViewHolder(view);
-    }*/
-
-
-/*
-    @Override
-    protected HistoriadeUsuario parseSnapshot(DataSnapshot snapshot) {
-        HistoriadeUsuario hu = super.parseSnapshot(snapshot);
-        if (hu != null) {
-            hu.setId(Integer.parseInt(snapshot.getKey()));
-        }
-        return hu;
-    }
-
-    @Override
-    protected void populateViewHolder( final ViewHolder viewHolder, HistoriadeUsuario model, int position) {
-        viewHolder.mItem=model;
-        Log.e("---------->",model.toString());
-        viewHolder.txtHistoria.setText("Historia de Usuario No "+model.getId_hu()+"");
-        viewHolder.txtprioridad.setText("Prioridad "+model.getPrioridad());
-        viewHolder.txtProyecto.setText("Protecto No "+model.getId_proyecto());
-        viewHolder.txtSprint.setText("Sprint No "+model.getId_sprint());
-        viewHolder.txtDesarrollador.setText("Desarrollador " +((model.getDesarrollador()!=null)?model.getDesarrollador().getNombre():"No asignado"));
-        viewHolder.txtTiempo.setText("Tiempo estimado " +model.getTiempoEstimado());
-        viewHolder.txtEstado.setText("Estado "+model.getEstado());
-        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intento= new Intent(v.getContext(),HistoriaUsuarioActivity.class);
-                intento.putExtra(Constants.IDHU,viewHolder.mItem.getId_hu()+"");
-                //Log.e("IDHU","no"+viewHolder.mItem.getIdHU());
-                v.getContext().startActivity(intento);
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    //mListener.onListFragmentInteraction(viewHolder.mItem);
-                }
-            }
-        });
-    }
-*/
 
     @Override
     public void startListening() {
@@ -108,14 +54,13 @@ public class MyHistoriaUsuarioRecyclerViewAdapter extends FirebaseRecyclerAdapte
         viewHolder.txtProyecto.setText("Protecto No "+model.getId_proyecto());
         viewHolder.txtSprint.setText("Sprint No "+model.getId_sprint());
         viewHolder.txtDesarrollador.setText("Desarrollador " +((model.getDesarrollador()!=null)?model.getDesarrollador().getNombre():"No asignado"));
-        viewHolder.txtTiempo.setText("Tiempo estimado " +model.getTiempoEstimado());
+        viewHolder.txtTiempo.setText("Tiempo transcurrido " +model.getTiempoTranscurrido());
         viewHolder.txtEstado.setText("Estado "+model.getEstado());
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intento= new Intent(v.getContext(),HistoriaUsuarioActivity.class);
                 intento.putExtra(Constants.IDHU,viewHolder.mItem.getId_hu()+"");
-                intento.putExtra(Constants.FORMTYPE,Constants.FORMASSIGN);
                 //Log.e("IDHU","no"+viewHolder.mItem.getIdHU());
                 v.getContext().startActivity(intento);
                 if (null != mListener) {
@@ -134,29 +79,7 @@ public class MyHistoriaUsuarioRecyclerViewAdapter extends FirebaseRecyclerAdapte
         return new ViewHolder(view);
     }
 
-    /* @Override
-     public void onBindViewHolder(final ViewHolder holder, int position) {
-         holder.mItem = mValues.get(position);
-         holder.mIdView.setText(mValues.get(position).getNombreHu());
-         holder.mContentView.setText(mValues.get(position).get_id());
 
-         holder.mView.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 if (null != mListener) {
-                     // Notify the active callbacks interface (the activity, if the
-                     // fragment is attached to one) that an item has been selected.
-                     mListener.onListFragmentInteraction(holder.mItem);
-                 }
-             }
-         });
-     }
-
-     @Override
-     public int getItemCount() {
-         return mValues.size();
-     }
- */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView txtHistoria;
