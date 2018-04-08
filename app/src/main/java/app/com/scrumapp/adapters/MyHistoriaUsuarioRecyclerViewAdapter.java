@@ -1,6 +1,7 @@
 package app.com.scrumapp.adapters;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,16 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+
+import java.util.List;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.activities.historiausuario.HistoriaUsuarioActivity;
-import app.com.scrumapp.fragments.HUInicialFragment.OnListFragmentInteractionListener;
+import app.com.scrumapp.data.model.HistoriadeUsuarioInicial;
+import app.com.scrumapp.fragments.huinicial.HUInicialFragment.OnListFragmentInteractionListener;
 
 import app.com.scrumapp.models.HistoriadeUsuario;
 
@@ -26,29 +27,14 @@ import app.com.scrumapp.models.HistoriadeUsuario;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyHistoriaUsuarioRecyclerViewAdapter extends FirebaseRecyclerAdapter<HistoriadeUsuario,MyHistoriaUsuarioRecyclerViewAdapter.ViewHolder> {
+public class MyHistoriaUsuarioRecyclerViewAdapter extends RecyclerView.Adapter<MyHistoriaUsuarioRecyclerViewAdapter.ViewHolder> {
 
-    private final OnListFragmentInteractionListener mListener;
-    public MyHistoriaUsuarioRecyclerViewAdapter(FirebaseRecyclerOptions<HistoriadeUsuario>  options,  OnListFragmentInteractionListener mListener) {
-        super(options);
-        //modelClass, modelLayout, viewHolderClass, ref
-        this.mListener = mListener;
+    private final List<HistoriadeUsuarioInicial> mValues;
+
+    public MyHistoriaUsuarioRecyclerViewAdapter(List<HistoriadeUsuarioInicial> items) {
+        mValues = items;
     }
 
-   /* private final List<HistoriadeUsuario> mValues;
-    private final OnListFragmentInteractionListener mListener;
-
-   /* public MyHistoriaUsuarioRecyclerViewAdapter(List<HistoriadeUsuario> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
-    }*/
-
-    /*@Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_historiausuario, parent, false);
-        return new ViewHolder(view);
-    }*/
 
 
 /*
@@ -89,49 +75,44 @@ public class MyHistoriaUsuarioRecyclerViewAdapter extends FirebaseRecyclerAdapte
     }
 */
 
-    @Override
-    public void startListening() {
-        super.startListening();
-    }
 
-    @Override
-    public void stopListening() {
-        super.stopListening();
-    }
 
-    @Override
-    protected void onBindViewHolder(final ViewHolder viewHolder, int position, HistoriadeUsuario model) {
-        viewHolder.mItem=model;
-        Log.e("---------->",model.toString());
-        viewHolder.txtHistoria.setText("Historia de Usuario No "+model.getId_hu()+"");
-        viewHolder.txtprioridad.setText("Prioridad "+model.getPrioridad());
-        viewHolder.txtProyecto.setText("Protecto No "+model.getId_proyecto());
-        viewHolder.txtSprint.setText("Sprint No "+model.getId_sprint());
-        viewHolder.txtDesarrollador.setText("Desarrollador " +((model.getDesarrollador()!=null)?model.getDesarrollador().getNombre():"No asignado"));
-        viewHolder.txtTiempo.setText("Tiempo estimado " +model.getTiempoEstimado());
-        viewHolder.txtEstado.setText("Estado "+model.getEstado());
-        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intento= new Intent(v.getContext(),HistoriaUsuarioActivity.class);
-                intento.putExtra(Constants.IDHU,viewHolder.mItem.getId_hu()+"");
-                intento.putExtra(Constants.FORMTYPE,Constants.FORMASSIGN);
-                //Log.e("IDHU","no"+viewHolder.mItem.getIdHU());
-                v.getContext().startActivity(intento);
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    //mListener.onListFragmentInteraction(viewHolder.mItem);
-                }
-            }
-        });
-    }
+
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_historiausuario, parent, false);
         return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
+        viewHolder.mItem=mValues.get(position);
+
+        viewHolder.txtHistoria.setText("Historia de Usuario No ");
+        viewHolder.txtprioridad.setText("Prioridad "+mValues.get(position).getPrioridad_hu());
+        viewHolder.txtProyecto.setText("Descripcion "+mValues.get(position).getNombre_hu());
+        viewHolder.txtSprint.setText("Sprint No "+mValues.get(position).getId_sprint());
+        viewHolder.txtDesarrollador.setText("Peso " +mValues.get(position).getPeso_hu());
+        //  viewHolder.txtTiempo.setText("Tiempo estimado " +model.getTiempoEstimado());
+        ///viewHolder.txtEstado.setText("Estado "+model.getEstado());
+        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intento= new Intent(v.getContext(),HistoriaUsuarioActivity.class);
+                intento.putExtra(Constants.IDHU,viewHolder.mItem.getId_sprint()+"");
+                intento.putExtra(Constants.FORMTYPE,Constants.FORMASSIGN);
+                //Log.e("IDHU","no"+viewHolder.mItem.getIdHU());
+                v.getContext().startActivity(intento);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return mValues.size();
     }
 
     /* @Override
@@ -166,7 +147,7 @@ public class MyHistoriaUsuarioRecyclerViewAdapter extends FirebaseRecyclerAdapte
         public final TextView txtDesarrollador;
         public final TextView txtTiempo;
         public final TextView txtEstado;
-        public HistoriadeUsuario mItem;
+        public HistoriadeUsuarioInicial mItem;
 
         public ViewHolder(View view) {
             super(view);

@@ -1,4 +1,4 @@
-package app.com.scrumapp.data.remote.retrofit;
+package app.com.scrumapp.data.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -11,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
+import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.adapters.MyHUAsignadasRecyclerViewAdapter;
+import app.com.scrumapp.adapters.MyHistoriaUsuarioRecyclerViewAdapter;
 import app.com.scrumapp.models.HistoriadeUsuario;
 
 /**
@@ -71,12 +76,17 @@ public class HUAsignadasFragment extends Fragment {
         recyclerView = (RecyclerView) view;
         mLinearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(mLinearLayoutManager);
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        FirebaseRecyclerOptions<HistoriadeUsuario> options =
-                new FirebaseRecyclerOptions.Builder<HistoriadeUsuario>()
-                        .setQuery(mFirebaseDatabaseReference.child("HistoriadeUsuario").orderByChild("asignada").equalTo(true), HistoriadeUsuario.class)
+
+        Query query = FirebaseFirestore.getInstance()
+                .collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo(Constants.CAMPOFILTROHU,true);
+
+
+        FirestoreRecyclerOptions<HistoriadeUsuario> options =
+                new FirestoreRecyclerOptions.Builder<HistoriadeUsuario>()
+                        .setQuery(query, HistoriadeUsuario.class)
                         .build();
+
 
         adapter=new MyHUAsignadasRecyclerViewAdapter( options, mListener);
 

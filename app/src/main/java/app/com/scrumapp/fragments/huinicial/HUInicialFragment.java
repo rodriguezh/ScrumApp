@@ -1,4 +1,4 @@
-package app.com.scrumapp.fragments;
+package app.com.scrumapp.fragments.huinicial;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,20 +6,31 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import java.util.List;
 
 import app.com.scrumapp.adapters.MyHistoriaUsuarioRecyclerViewAdapter;
 import app.com.scrumapp.R;
 
+import app.com.scrumapp.data.model.HistoriadeUsuarioInicial;
+import app.com.scrumapp.data.model.SprintBacklogResponse;
+import app.com.scrumapp.data.remote.retrofit.APIServiceSprintBacklog;
+import app.com.scrumapp.data.remote.retrofit.ApiUtils;
 import app.com.scrumapp.models.HistoriadeUsuario;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A fragment representing a list of Items.
@@ -27,17 +38,17 @@ import app.com.scrumapp.models.HistoriadeUsuario;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HUInicialFragment extends Fragment {
+public class HUInicialFragment extends Fragment implements HUInicialContract.View {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private DatabaseReference mFirebaseDatabaseReference;
     private RecyclerView recyclerView;
     private MyHistoriaUsuarioRecyclerViewAdapter adapter;
     private LinearLayoutManager mLinearLayoutManager;
+
+    private HUInicialContract.Presenter mPresenter;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -58,21 +69,14 @@ public class HUInicialFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-
-
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
-
+      mPresenter= new HUInicialPresenter(this,1,1);
+        recyclerView = (RecyclerView)getActivity().findViewById(R.id.listhui);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
 
@@ -81,38 +85,25 @@ public class HUInicialFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_historiausuario_list, container, false);
 
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            mLinearLayoutManager = new LinearLayoutManager(context);
-            recyclerView.setLayoutManager(mLinearLayoutManager);
-            mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
-            FirebaseRecyclerOptions<HistoriadeUsuario> options =
-                    new FirebaseRecyclerOptions.Builder<HistoriadeUsuario>()
-                            .setQuery(mFirebaseDatabaseReference.child("HistoriadeUsuario").orderByChild("asignada").equalTo(false), HistoriadeUsuario.class)
-                            .build();
-
-            adapter=new MyHistoriaUsuarioRecyclerViewAdapter( options, mListener);
-
-
-            recyclerView.setAdapter(adapter);
-
-
-        }
         return view;
     }
-
+    private APIServiceSprintBacklog apiService;
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.start();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.startListening();
+
     }
 
     @Override
@@ -129,6 +120,23 @@ public class HUInicialFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void loadView(List<HistoriadeUsuarioInicial> list) {
+        Log.e("--->",list.toString());
+        adapter=new MyHistoriaUsuarioRecyclerViewAdapter(list);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void setPresenter(HUInicialContract.Presenter presenter) {
+        mPresenter=checkNotNull(presenter);
+    }
+
+    @Override
+    public void showInfoMessage(String respuesta) {
+
     }
 
     /**

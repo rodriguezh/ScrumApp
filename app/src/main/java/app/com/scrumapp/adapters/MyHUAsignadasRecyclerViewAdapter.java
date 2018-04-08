@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
@@ -25,10 +27,10 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyHUAsignadasRecyclerViewAdapter extends FirebaseRecyclerAdapter<HistoriadeUsuario,MyHUAsignadasRecyclerViewAdapter.ViewHolder> {
+public class MyHUAsignadasRecyclerViewAdapter extends FirestoreRecyclerAdapter<HistoriadeUsuario,MyHUAsignadasRecyclerViewAdapter.ViewHolder> {
 
     private final OnListFragmentInteractionListener mListener;
-    public MyHUAsignadasRecyclerViewAdapter(FirebaseRecyclerOptions<HistoriadeUsuario> options, OnListFragmentInteractionListener mListener) {
+    public MyHUAsignadasRecyclerViewAdapter(FirestoreRecyclerOptions<HistoriadeUsuario> options, OnListFragmentInteractionListener mListener) {
         super(options);
         //modelClass, modelLayout, viewHolderClass, ref
         this.mListener = mListener;
