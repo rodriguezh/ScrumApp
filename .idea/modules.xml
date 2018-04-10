@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\Fernando\Documents\Ing Sistemas XII\Seminario\scrumapp\ScrumApp.iml" filepath="C:\Users\Fernando\Documents\Ing Sistemas XII\Seminario\scrumapp\ScrumApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ScrumApp.iml" filepath="$PROJECT_DIR$/ScrumApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Fernando\Documents\Ing Sistemas XII\Seminario\scrumapp\app\app.iml" filepath="C:\Users\Fernando\Documents\Ing Sistemas XII\Seminario\scrumapp\app\app.iml" />
-      <module fileurl="file://C:\Users\Fernando\Documents\Ing Sistemas XII\Seminario\scrumapp\scrum.iml" filepath="C:\Users\Fernando\Documents\Ing Sistemas XII\Seminario\scrumapp\scrum.iml" />
-      <module fileurl="file://$PROJECT_DIR$/scrumapp.iml" filepath="$PROJECT_DIR$/scrumapp.iml" />
     </modules>
   </component>
 </project>

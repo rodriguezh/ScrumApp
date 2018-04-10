@@ -1,8 +1,11 @@
 package app.com.scrumapp.activities.historiausuario;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,9 +13,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.models.HistoriadeUsuario;
@@ -31,16 +42,39 @@ public class HistoriaUsuarioPresenter implements HistoriaUsuarioContract.Present
 
     DatabaseReference mFirebaseDatabaseReference;
 
+    private final FirebaseFirestore db;
+
     public HistoriaUsuarioPresenter(@NonNull HistoriaUsuarioContract.View mProfileView, @NonNull String idHu) {
         this.mProfileView = mProfileView;
         this.idHu = idHu;
         usuarios= new ArrayList<>();
+        this.db = FirebaseFirestore.getInstance();
     }
 
 
     @Override
     public void saveUserHistory(final HistoriadeUsuario hu) {
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        final DocumentReference postRef = db.collection("HistoriadeUsuario").document(hu.getId());
+        Map<String,Object> map= hu.toMapUpdate();
+
+        if(hu.getEstado()!=null && hu.getEstado().length()>0){
+            map.put("estado", hu.getEstado());
+            map.put("fechaFin", hu.getFechaFin());
+            map.put("motivocancelacion", hu.getMotivocancelacion());
+        }
+
+        postRef.update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mProfileView.showInfoMessage("Historia Actualizada");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mProfileView.showInfoMessage("No fue posible actualizar");
+            }
+        });
+       /* mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference postRef= mFirebaseDatabaseReference.child("/HistoriadeUsuario/"+hu.getId());
         postRef.runTransaction(new Transaction.Handler() {
             @Override
@@ -76,52 +110,54 @@ public class HistoriaUsuarioPresenter implements HistoriaUsuarioContract.Present
                  Log.d(TAG, "postTransaction:onComplete:" + databaseError);
             }
 
-        });
+        });*/
     }
 
     @Override
     public void getUserHistory(String idHu) {
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("HistoriadeUsuario");
-        mFirebaseDatabaseReference.orderByChild("id_hu").equalTo(Integer.parseInt(idHu)).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                   HistoriadeUsuario hu = dataSnapshot.getValue(HistoriadeUsuario.class);
-                   hu.setId(Integer.parseInt(dataSnapshot.getKey()));
+        Log.e("---->",idHu);
+        db.collection("HistoriadeUsuario")
+                .whereEqualTo("id_hu", Integer.parseInt(idHu))
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "listen:error", e);
+                            return;
+                        }
+                        HistoriadeUsuario hu;
 
-                   if (hu.getTiempoTranscurrido()!=null){
-                       tiempoCronometro(hu.getTiempoTranscurrido());
-                   }
-                   mProfileView.loadView(hu);
-            }
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                     hu = dc.getDocument().toObject(HistoriadeUsuario.class);
+                                    hu.setId(dc.getDocument().getId());
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                HistoriadeUsuario hu = dataSnapshot.getValue(HistoriadeUsuario.class);
-                hu.setId(Integer.parseInt(dataSnapshot.getKey()));
+                                    if (hu.getTiempoTranscurrido()!=null){
+                                        tiempoCronometro(hu.getTiempoTranscurrido());
+                                    }
+                                    mProfileView.loadView(hu);
+                                    Log.d(TAG,  "oe "+dc.getDocument().toObject(HistoriadeUsuario.class).toString());
+                                    break;
+                                case MODIFIED:
+                                     hu = dc.getDocument().toObject(HistoriadeUsuario.class);
+                                    hu.setId(dc.getDocument().getId());
 
-                if (hu.getTiempoTranscurrido()!=null){
-                    tiempoCronometro(hu.getTiempoTranscurrido());
-                }
-                mProfileView.loadView(hu);
-            }
+                                    if (hu.getTiempoTranscurrido()!=null){
+                                        tiempoCronometro(hu.getTiempoTranscurrido());
+                                    }
+                                    mProfileView.loadView(hu);
+                                    Log.d(TAG, "Modified : " + dc.getDocument().toObject(HistoriadeUsuario.class).toString());
+                                    break;
+                                case REMOVED:
+                                    Log.d(TAG, "Removed city: " + dc.getDocument().getData());
+                                    break;
+                            }
+                        }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-            // ...
-        });
+                    }
+                });
     }
 
     @Override

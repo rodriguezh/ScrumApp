@@ -4,10 +4,9 @@ public class ApiUtils {
 
     private ApiUtils() {}
 
-    public static final String BASE_URL = "http://192.168.0.16:3000/";
 
-    public static APIService getAPIService() {
+    public static APIServiceSprintBacklog getAPIService(String baseUrl) {
 
-        return RetrofitClient.getClient(BASE_URL).create(APIService.class);
+        return RetrofitClient.getClient(baseUrl).create(APIServiceSprintBacklog.class);
     }
 }

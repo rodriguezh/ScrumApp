@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class HistoriadeUsuario {
 
-    private int id;
+     private String id;
      private int id_hu;
      private int id_proyecto;
      private int id_sprint;
@@ -17,7 +17,6 @@ public class HistoriadeUsuario {
      private String criterio_aceptacion;
      private int esfuerzo;
      private String prioridad;
-
      private double tiempoEstimado;
      private String estado;
      private String tiempoTranscurrido;
@@ -57,11 +56,11 @@ public class HistoriadeUsuario {
         this.asignada = asignada;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -199,9 +198,23 @@ public class HistoriadeUsuario {
         result.put("estado", estado);
         result.put("tiempoEstimado", tiempoEstimado);
         result.put("asignada", asignada);
+        result.put("tiempoTranscurrido", tiempoTranscurrido);
+        result.put("fechaInicio", fechaInicio);
+        result.put("fechaFin", fechaFin);
+        result.put("informacionadicional", informacionadicional);
+        result.put("motivocancelacion", motivocancelacion);
         return result;
     }
 
+    @Exclude
+    public Map<String, Object> toMapUpdate() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("informacionadicional", informacionadicional);
+        result.put("tiempoTranscurrido", tiempoTranscurrido);
+        result.put("fechaInicio", fechaInicio);
+        result.put("asignada", asignada);
+        return result;
+    }
 
     @Override
     public String toString() {

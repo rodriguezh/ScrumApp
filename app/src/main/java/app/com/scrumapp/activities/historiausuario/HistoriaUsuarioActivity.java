@@ -52,7 +52,7 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
     Button btnInciar,btnDetener,btnFinalizarTarea,btnCancelarTarea;
     TextView txtNoHU, txtProyecto,txtSprint,txtEstado,txtEsfuerzo,txtPrioridad,txtFechaInicio,txtFechaFin;
     private Spinner spinnerUsers;
-    private int keyHistoriaUsuario;
+    private String keyHistoriaUsuario;
     private Usuario usuario;
     private String fechaInicial;
     private int tipoForm;
