@@ -27,7 +27,7 @@ public class HUInicialPresenter implements HUInicialContract.Presenter, CallBack
 
     private List<HistoriadeUsuarioInicial> historiadeUsuarioInicials;
 
-    private LogicHUInicial logicHUInicial;
+    private LogicHUInicial logicHUInicial = LogicHUInicial.getIntance();
 
     public HUInicialPresenter(@NonNull HUInicialContract.View mView, @NonNull int id_pb, @NonNull int id_sprint) {
         this.mView = mView;
@@ -39,7 +39,6 @@ public class HUInicialPresenter implements HUInicialContract.Presenter, CallBack
 
     @Override
     public void getUsesrHistory(int id_pb, int id_sprint) {
-        logicHUInicial = new LogicHUInicial();
         logicHUInicial.list(1,1,this);
 
         /*apiService.getHistoriasUsuarioIni(id_sprint).enqueue(new Callback<SprintBacklogResponse>() {

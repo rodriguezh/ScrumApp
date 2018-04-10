@@ -2,6 +2,9 @@ package app.com.scrumapp.activities.historiausuario;
 
 import android.util.Log;
 
+import app.com.scrumapp.Constants;
+import app.com.scrumapp.data.remote.retrofit.APIServiceSprintBacklog;
+import app.com.scrumapp.data.remote.retrofit.ApiUtils;
 import app.com.scrumapp.models.HistoriadeUsuario;
 import app.com.scrumapp.models.Usuario;
 
@@ -21,8 +24,11 @@ public class HistoriaUsuarioLogic implements HistoriaUsuarioILogic{
 
     private static HistoriaUsuarioLogic instance = null;
     DatabaseReference mFirebaseDatabaseReference;
+    private APIServiceSprintBacklog apiService;
 
-    protected HistoriaUsuarioLogic(){}
+    protected HistoriaUsuarioLogic(){
+        apiService = ApiUtils.getAPIService(Constants.BASE_URLSPRINTB);
+    }
 
     public static HistoriaUsuarioLogic getIntance(){
         if(instance == null){
