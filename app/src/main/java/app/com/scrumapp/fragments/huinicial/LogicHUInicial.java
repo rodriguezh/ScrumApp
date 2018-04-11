@@ -1,5 +1,8 @@
 package app.com.scrumapp.fragments.huinicial;
 
+import android.util.Log;
+
+import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.util.Log;
 
@@ -7,6 +10,11 @@ import java.util.List;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.data.model.HistoriadeUsuarioInicial;
+
+import android.util.Log;
+
+import app.com.scrumapp.Constants;
+
 import app.com.scrumapp.data.model.SprintBacklogResponse;
 import app.com.scrumapp.data.remote.retrofit.APIServiceSprintBacklog;
 import app.com.scrumapp.data.remote.retrofit.ApiUtils;
@@ -18,13 +26,23 @@ import static android.content.ContentValues.TAG;
 
 public class LogicHUInicial implements  ILogicHUInicial {
 
+
+    private static LogicHUInicial instance = null;
     private APIServiceSprintBacklog apiService;
 
-    public LogicHUInicial() {
+    protected LogicHUInicial() {
       //  this.apiService = apiService;
         apiService = ApiUtils.getAPIService(Constants.BASE_URLSPRINTB);
     }
-    String s;
+
+    public static LogicHUInicial getIntance(){
+        if(instance == null){
+            instance = new LogicHUInicial();
+        }
+
+        return instance;
+    }
+
     @Override
     public void list(int id_pb, int id_sprint, final CallBackResponse callBackResponse) {
 
