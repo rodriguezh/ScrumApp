@@ -8,5 +8,6 @@ public interface HistoriaUsuarioILogic{
     void saveUserHistory(HistoriadeUsuario hu, CallBackResponse response);
 
     void getUserHistory(String idHu, CallBackResponse response);
+
     void getUsers(CallBackResponse response);
 }

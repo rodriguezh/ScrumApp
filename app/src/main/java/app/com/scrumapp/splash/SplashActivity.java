@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import app.com.scrumapp.activities.LoginActivity;
+import app.com.scrumapp.activities.login.LoginActivity;
 import app.com.scrumapp.activities.MainActivity;
 import app.com.scrumapp.utils.Util;
 
