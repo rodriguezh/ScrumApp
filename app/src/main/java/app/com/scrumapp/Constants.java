@@ -15,5 +15,6 @@ public class Constants {
     public static String CAMPOFILTROHU="asignada";
 
     public static String BASE_URLSPRINTB = "https://apex.oracle.com/";
+    public static String BASE_URLLOGIN = "https://apex.oracle.com/";
 
 }

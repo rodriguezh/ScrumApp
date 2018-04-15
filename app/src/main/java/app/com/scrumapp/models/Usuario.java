@@ -6,6 +6,7 @@ public class Usuario {
     private String rol;
     private String email;
     private String password;
+    private int idProyecto;
 
     public Usuario(String identificacion, String nombre, String rol) {
         this.identificacion = identificacion;
@@ -52,4 +53,8 @@ public class Usuario {
     public void setPassword(String password){ this.password = password; }
 
     public String getPassword(){ return this.password; }
+
+    public void setIdProyecto(int idProyecto){ this.idProyecto = idProyecto; }
+
+    public int getIdProyecto(){ return this.idProyecto; }
 }
