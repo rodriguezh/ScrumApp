@@ -1,5 +1,7 @@
 package app.com.scrumapp.activities.login;
 
+import app.com.scrumapp.models.Usuario;
+
 public class LoginLogic implements LoginILogic {
 
     private static LoginLogic instance = null;
@@ -15,7 +17,11 @@ public class LoginLogic implements LoginILogic {
     }
 
     @Override
-    public void validateUser(String email, String password) {
+    public void validateUser(String email, String password, CallBackResponse response) {
+        Usuario objUsuario = new Usuario("000011", "Fulano", "Desarrollador");
+        objUsuario.setEmail(email);
+        objUsuario.setPassword(password);
 
+        response.onSuccess(objUsuario, "validateUser");
     }
 }

@@ -18,6 +18,8 @@ import app.com.scrumapp.activities.MainActivity;
 import app.com.scrumapp.models.Usuario;
 import app.com.scrumapp.utils.Util;
 
+import com.google.gson.Gson;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mPresenter = LoginPresenter.getInstance(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -55,8 +58,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 }
             }
         });
-
-        mPresenter = LoginPresenter.getInstance(this);
     }
 
     private void setCredentialsIfExists() {
@@ -89,10 +90,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private void saveOnPreferences(Usuario objUsuario){
         if(switchRemember.isChecked()){
+            Gson gson = new Gson();
             // permite escribir en el editor
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("email", objUsuario.getEmail());
             editor.putString("pass",objUsuario.getPassword());
+            editor.putString("usuario", gson.toJson(objUsuario.getPassword()));
 
             // para que la instrucción sea sincrona se coloca editr.commit() espera que termine todo lo anterior para continuar con la siguiente línea
             editor.apply();
@@ -122,12 +125,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         else {
             goToMain();
             saveOnPreferences(objUsuario);
-            /*
-            To Read
-            SharedPreferences settings = getSharedPreferences("scrumappSettings",
-            Context.MODE_PRIVATE);
-            String myString = settings.getString("mystring", "defaultvalue");
-             */
         }
     }
 

@@ -9,6 +9,7 @@ public class LoginPresenter implements LoginContract.Presenter, CallBackResponse
     private static LoginPresenter instance = null;
     @NonNull
     private final LoginContract.View mProfileView;
+    LoginLogic logic = LoginLogic.getInstance();
 
     protected LoginPresenter(@NonNull LoginContract.View mProfileView) {
         this.mProfileView = mProfileView;
@@ -43,5 +44,6 @@ public class LoginPresenter implements LoginContract.Presenter, CallBackResponse
 
     @Override
     public void validateUser(String email, String password) {
+        logic.validateUser(email, password, this);
     }
 }
