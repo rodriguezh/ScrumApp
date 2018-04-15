@@ -1,5 +1,6 @@
 package app.com.scrumapp.activities.historiausuario;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
@@ -41,6 +42,7 @@ import app.com.scrumapp.R;
 import app.com.scrumapp.models.HistoriadeUsuario;
 import app.com.scrumapp.models.Usuario;
 import app.com.scrumapp.utils.Util;
+import android.text.TextUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -109,6 +111,9 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     }
 
+    public void msnCancelacion(String msj){
+        Toast.makeText(this, msj, Toast.LENGTH_SHORT).show();
+    }
 
     View.OnClickListener mStartListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -127,8 +132,15 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     View.OnClickListener mCancelarHU = new View.OnClickListener() {
         public void onClick(View v) {
-            mPresenter.saveUserHistory(actualizarHU(Constants.CANCEL));
-            chronometer.stop();
+            String motivo = edtMotivoCandelacion.getText().toString();
+
+            if(!TextUtils.isEmpty(motivo)){
+                mPresenter.saveUserHistory(actualizarHU(Constants.CANCEL));
+                chronometer.stop();
+            }else {
+                msnCancelacion("Debe ingresar motivo de cancelación");
+                return;
+            }
         }
     };
 
