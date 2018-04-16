@@ -147,6 +147,18 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     @Override
     public void loadView(HistoriadeUsuario hu) {
+
+        String estadoHU = hu.getEstado().toString();
+
+        if(estadoHU.equals(Constants.DONE) || estadoHU.equals(Constants.CANCEL)){
+            edtMotivoCandelacion.setEnabled(false);
+            edtinfAdicional.setEnabled(false);
+            btnCancelarTarea.setEnabled(false);
+            btnFinalizarTarea.setEnabled(false);
+            btnInciar.setEnabled(false);
+            btnDetener.setEnabled(false);
+        }
+
         keyHistoriaUsuario=hu.getId();
         txtNoHU.setText(hu.getId_hu()+"");
         txtProyecto.setText(hu.getId_proyecto()+"");
