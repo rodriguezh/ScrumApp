@@ -13,7 +13,16 @@ public class Constants {
     public static int FORMUPDATE=2;
     public static String COLLECTIONHISTORIAUSUARIO="HistoriadeUsuario";
     public static String CAMPOFILTROHU="asignada";
+    public static String IDPROYECTO="IdPB";
+    public static String IDSPRINT="IdSPrint";
 
-    public static String BASE_URLSPRINTB = "https://apex.oracle.com/";
+    public static String ESTADO="Estado";
+    public static String ESFUERZO="Esfuerzo";
+    public static String DESCRIPCION ="Descripcion";
+    public static String CRITERIOSACEPTACION="Criterios";
+    public static String PRIORIDAD="Prioridad";
 
+  //  public static String BASE_URLSPRINTB = "https://apex.oracle.com/";
+    public static String BASE_URLPROJECTS ="http://pbacklog-pbacklog.1d35.starter-us-east-1.openshiftapps.com/";
+    public static String BASE_URLSPRINTB = "http://192.168.0.12:8080/";
 }

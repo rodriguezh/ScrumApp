@@ -3,24 +3,18 @@ package app.com.scrumapp.adapters;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.List;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.activities.historiausuario.HistoriaUsuarioActivity;
-import app.com.scrumapp.data.model.HistoriadeUsuarioInicial;
+import app.com.scrumapp.data.model.HUInicialResponse;
 import app.com.scrumapp.fragments.huinicial.HUInicialFragment.OnListFragmentInteractionListener;
-
-import app.com.scrumapp.models.HistoriadeUsuario;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
@@ -29,9 +23,9 @@ import app.com.scrumapp.models.HistoriadeUsuario;
  */
 public class MyHistoriaUsuarioRecyclerViewAdapter extends RecyclerView.Adapter<MyHistoriaUsuarioRecyclerViewAdapter.ViewHolder> {
 
-    private final List<HistoriadeUsuarioInicial> mValues;
+    private final List<HUInicialResponse> mValues;
 
-    public MyHistoriaUsuarioRecyclerViewAdapter(List<HistoriadeUsuarioInicial> items) {
+    public MyHistoriaUsuarioRecyclerViewAdapter(List<HUInicialResponse> items) {
         mValues = items;
     }
 
@@ -97,12 +91,20 @@ public class MyHistoriaUsuarioRecyclerViewAdapter extends RecyclerView.Adapter<M
         viewHolder.txtSprint.setText("Sprint No "+mValues.get(position).getId_sprint());
         viewHolder.txtDesarrollador.setText("Peso " +mValues.get(position).getPeso_hu());
         //  viewHolder.txtTiempo.setText("Tiempo estimado " +model.getTiempoEstimado());
-        ///viewHolder.txtEstado.setText("Estado "+model.getEstado());
+        viewHolder.txtEstado.setText("Estado Creada");
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intento= new Intent(v.getContext(),HistoriaUsuarioActivity.class);
-                intento.putExtra(Constants.IDHU,viewHolder.mItem.getId_sprint()+"");
+                intento.putExtra(Constants.IDHU,viewHolder.mItem.getId_hu());
+                intento.putExtra(Constants.IDPROYECTO,viewHolder.mItem.getId_proyecto());
+                intento.putExtra(Constants.IDSPRINT,viewHolder.mItem.getId_sprint());
+                intento.putExtra(Constants.ESTADO,"CREATE");
+                intento.putExtra(Constants.ESFUERZO,viewHolder.mItem.getPeso_hu());
+                intento.putExtra(Constants.DESCRIPCION,viewHolder.mItem.getDescripcion());
+                intento.putExtra(Constants.CRITERIOSACEPTACION,viewHolder.mItem.getCriterio_aceptacion());
+                intento.putExtra(Constants.PRIORIDAD,viewHolder.mItem.getPrioridad_hu());
+
                 intento.putExtra(Constants.FORMTYPE,Constants.FORMASSIGN);
                 //Log.e("IDHU","no"+viewHolder.mItem.getIdHU());
                 v.getContext().startActivity(intento);
@@ -147,7 +149,7 @@ public class MyHistoriaUsuarioRecyclerViewAdapter extends RecyclerView.Adapter<M
         public final TextView txtDesarrollador;
         public final TextView txtTiempo;
         public final TextView txtEstado;
-        public HistoriadeUsuarioInicial mItem;
+        public HUInicialResponse mItem;
 
         public ViewHolder(View view) {
             super(view);

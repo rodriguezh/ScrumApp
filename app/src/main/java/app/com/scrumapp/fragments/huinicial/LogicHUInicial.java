@@ -3,15 +3,6 @@ package app.com.scrumapp.fragments.huinicial;
 import android.util.Log;
 
 import static android.content.ContentValues.TAG;
-import android.app.Activity;
-import android.util.Log;
-
-import java.util.List;
-
-import app.com.scrumapp.Constants;
-import app.com.scrumapp.data.model.HistoriadeUsuarioInicial;
-
-import android.util.Log;
 
 import app.com.scrumapp.Constants;
 
@@ -22,8 +13,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.ContentValues.TAG;
-
 public class LogicHUInicial implements  ILogicHUInicial {
 
 
@@ -31,7 +20,6 @@ public class LogicHUInicial implements  ILogicHUInicial {
     private APIServiceSprintBacklog apiService;
 
     protected LogicHUInicial() {
-      //  this.apiService = apiService;
         apiService = ApiUtils.getAPIService(Constants.BASE_URLSPRINTB);
     }
 
@@ -39,30 +27,27 @@ public class LogicHUInicial implements  ILogicHUInicial {
         if(instance == null){
             instance = new LogicHUInicial();
         }
-
         return instance;
     }
 
     @Override
     public void list(int id_pb, int id_sprint, final CallBackResponse callBackResponse) {
 
-        apiService.getHistoriasUsuarioIni(id_sprint).enqueue(new Callback<SprintBacklogResponse>() {
+        apiService.getHistorias(id_pb,id_sprint).enqueue(new Callback<SprintBacklogResponse>() {
             @Override
             public void onResponse(Call<SprintBacklogResponse> call, Response<SprintBacklogResponse> response) {
                 if(response.isSuccessful()) {
-
-                    callBackResponse.onSuccess(response.body().getHistoriadeUsuarioInicials());
-
-                    Log.i(TAG, "post submitted to API." + response.body().getHistoriadeUsuarioInicials().toString());
+                    callBackResponse.onSuccess(response.body().getMessage());
+                    Log.i(TAG, "post submitted to API." + response.body().getMessage().toString());
                 }else{
                     Log.e(TAG, "Unable to submit post to API." + response.body()+"\n"+response.message()+"\n"+response.raw());
-
                 }
             }
 
             @Override
             public void onFailure(Call<SprintBacklogResponse> call, Throwable t) {
                 Log.e(TAG, "Unable to submit post to API." + t.toString());
+                callBackResponse.onnError(t.getMessage());
             }
         });
 

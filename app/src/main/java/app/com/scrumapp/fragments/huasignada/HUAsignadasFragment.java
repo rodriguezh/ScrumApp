@@ -1,26 +1,22 @@
-package app.com.scrumapp.fragments;
+package app.com.scrumapp.fragments.huasignada;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.adapters.MyHUAsignadasRecyclerViewAdapter;
-import app.com.scrumapp.adapters.MyHistoriaUsuarioRecyclerViewAdapter;
 import app.com.scrumapp.models.HistoriadeUsuario;
 
 /**
@@ -79,7 +75,8 @@ public class HUAsignadasFragment extends Fragment {
 
 
         Query query = FirebaseFirestore.getInstance()
-                .collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo(Constants.CAMPOFILTROHU,true);
+                .collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo("id_proyecto",getArguments().getInt(Constants.IDPROYECTO)).whereEqualTo("id_sprint",getArguments().getInt(Constants.IDSPRINT));
+                //.collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo(Constants.CAMPOFILTROHU,true);
 
 
         FirestoreRecyclerOptions<HistoriadeUsuario> options =

@@ -54,9 +54,10 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
     private Spinner spinnerUsers;
     private String keyHistoriaUsuario;
     private Usuario usuario;
-    private String fechaInicial;
+    private String fechaInicial, idHU;
     private int tipoForm;
     private LinearLayout linearLayout;
+    Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,22 +91,29 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-       Bundle bundle = getIntent().getExtras();
-
-        if(bundle.getString(Constants.IDHU)!= null){
-            mPresenter = new HistoriaUsuarioPresenter(this,bundle.getString(Constants.IDHU));
-        }
+        bundle = getIntent().getExtras();
 
         if (bundle.getInt(Constants.FORMTYPE)==Constants.FORMASSIGN){
+            idHU=bundle.getInt(Constants.IDHU)+"";
+            txtNoHU.setText(bundle.getInt(Constants.IDHU)+"");
+            txtProyecto.setText(bundle.getInt(Constants.IDPROYECTO)+"");
+            txtSprint.setText(bundle.getInt(Constants.IDSPRINT)+"");
+            txtEstado.setText(bundle.getString(Constants.ESTADO));
+            txtEsfuerzo.setText("Esfuerzo: "+bundle.getInt(Constants.ESFUERZO));
+            txtPrioridad.setText("Prioridad: "+bundle.getInt(Constants.PRIORIDAD));
+            edtDescripcion.setText(bundle.getString(Constants.DESCRIPCION));
+            edtCriteriosAceptacion.setText(bundle.getString(Constants.CRITERIOSACEPTACION));
             tipoForm=Constants.FORMASSIGN;
         }else{
+            idHU=bundle.getString(Constants.IDHU);
             tipoForm=Constants.FORMUPDATE;
             spinnerUsers.setEnabled(false);
             edtCriteriosAceptacion.setFocusable(false);
             edtDescripcion.setFocusable(false);
             linearLayout.setVisibility(View.VISIBLE);
         }
-
+        mPresenter = new HistoriaUsuarioPresenter(this,idHU);
+        mPresenter.getUsers();
 
     }
 
@@ -143,7 +151,9 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
     @Override
     protected void onPostResume() {
         super.onPostResume();
+       if(tipoForm==Constants.FORMUPDATE){
         mPresenter.start();
+       }
     }
 
 
@@ -204,7 +214,7 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
         switch (item.getItemId()){
             case R.id.navigation_save:
                 if(tipoForm==Constants.FORMASSIGN){
-                    mPresenter.saveUserHistory(asignar());
+                    mPresenter.createUserHistory(asignar());
                 }else{
                     mPresenter.saveUserHistory(actualizarHU(""));
                 }
@@ -215,7 +225,13 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     private HistoriadeUsuario asignar(){
         HistoriadeUsuario hu = new HistoriadeUsuario();
-        hu.setId(keyHistoriaUsuario);
+        hu.setId_hu(Integer.parseInt(txtNoHU.getText().toString()));
+        hu.setId_proyecto(Integer.parseInt(txtProyecto.getText().toString()));
+        hu.setId_sprint(Integer.parseInt(txtSprint.getText().toString()));
+        hu.setCriterio_aceptacion(edtCriteriosAceptacion.getText().toString());
+        hu.setDescripcion(edtDescripcion.getText().toString());
+        hu.setEsfuerzo(bundle.getInt(Constants.ESFUERZO));
+        hu.setPrioridad(bundle.getInt(Constants.PRIORIDAD)+"");
         hu.setEstado(Constants.TODO);
         hu.setAsignada(true);
         hu.setDesarrollador((Usuario)spinnerUsers.getSelectedItem());

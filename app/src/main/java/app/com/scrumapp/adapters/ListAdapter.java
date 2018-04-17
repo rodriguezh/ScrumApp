@@ -59,9 +59,7 @@ public class ListAdapter extends BaseAdapter {
         }
 
         final Proyecto currentProject = getItem(position);
-        holder.name.setText(currentProject.getName());
-        holder.origin.setText(currentProject.getOrigin());
-        holder.icon.setImageResource(currentProject.getIcon());
+
 
         return convertView;
     }

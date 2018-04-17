@@ -9,4 +9,9 @@ public class ApiUtils {
 
         return RetrofitClient.getClient(baseUrl).create(APIServiceSprintBacklog.class);
     }
+
+    public static APIServiceProjects getAPIServiceProject(String baseUrl) {
+
+        return RetrofitClient.getClient(baseUrl).create(APIServiceProjects.class);
+    }
 }

@@ -3,7 +3,7 @@ package app.com.scrumapp.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class HistoriadeUsuarioInicial {
+public class HUInicialResponse {
     @SerializedName("id_sprint")
     @Expose
     private int id_sprint;
@@ -16,16 +16,60 @@ public class HistoriadeUsuarioInicial {
     @SerializedName("peso_hu")
     @Expose
     private int peso_hu;
+    @SerializedName("id_hu")
+    @Expose
+    private int id_hu;
+    @SerializedName("id_proyecto")
+    @Expose
+    private int id_proyecto;
+    @SerializedName("descripcion")
+    @Expose
+    private String descripcion;
+    @SerializedName("criterio_aceptacion")
+    @Expose
+    private String criterio_aceptacion;
 
-    public HistoriadeUsuarioInicial(int id_sprint, String nombre_hu, int prioridad_hu, int peso_hu) {
+    public HUInicialResponse(int id_sprint, String nombre_hu, int prioridad_hu, int peso_hu) {
         this.id_sprint = id_sprint;
         this.nombre_hu = nombre_hu;
         this.prioridad_hu = prioridad_hu;
         this.peso_hu = peso_hu;
     }
 
-    public HistoriadeUsuarioInicial() {
+    public HUInicialResponse() {
 
+    }
+
+    public int getId_hu() {
+        return id_hu;
+    }
+
+    public void setId_hu(int id_hu) {
+        this.id_hu = id_hu;
+    }
+
+    public int getId_proyecto() {
+        return id_proyecto;
+    }
+
+    public void setId_proyecto(int id_proyecto) {
+        this.id_proyecto = id_proyecto;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getCriterio_aceptacion() {
+        return criterio_aceptacion;
+    }
+
+    public void setCriterio_aceptacion(String criterio_aceptacion) {
+        this.criterio_aceptacion = criterio_aceptacion;
     }
 
     public int getId_sprint() {

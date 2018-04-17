@@ -8,13 +8,13 @@ import java.util.List;
 public class SprintBacklogResponse {
 
 
-    @SerializedName("next")
+    /*@SerializedName("next")
     @Expose
     private Object next;
 
     @SerializedName("items")
     @Expose
-    private List<HistoriadeUsuarioInicial> historiadeUsuarioInicials;
+    private ArrayList<HistoriadeUsuarioInicial> historiadeUsuarioInicials;
 
     public Object getNext() {
         return next;
@@ -24,11 +24,11 @@ public class SprintBacklogResponse {
         this.next = next;
     }
 
-    public List<HistoriadeUsuarioInicial> getHistoriadeUsuarioInicials() {
+    public ArrayList<HistoriadeUsuarioInicial> getHistoriadeUsuarioInicials() {
         return historiadeUsuarioInicials;
     }
 
-    public void setHistoriadeUsuarioInicials(List<HistoriadeUsuarioInicial> historiadeUsuarioInicials) {
+    public void setHistoriadeUsuarioInicials(ArrayList<HistoriadeUsuarioInicial> historiadeUsuarioInicials) {
         this.historiadeUsuarioInicials = historiadeUsuarioInicials;
     }
 
@@ -37,6 +37,37 @@ public class SprintBacklogResponse {
         return "SprintBacklogResponse{" +
                 "next='" + next + '\'' +
                 ", historiadeUsuarioInicials=" + historiadeUsuarioInicials +
+                '}';
+    }*/
+    @SerializedName("status")
+    @Expose
+    private int status;
+    @SerializedName("message")
+    @Expose
+    private List<HUInicialResponse> hiSprintList;
+
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public List<HUInicialResponse> getMessage() {
+        return hiSprintList;
+    }
+
+    public void setMessage(List<HUInicialResponse> hiSprintList) {
+        this.hiSprintList = hiSprintList;
+    }
+
+    @Override
+    public String toString() {
+        return "ApiResponse{" +
+                "status=" + status +
+                ", message=" + hiSprintList +
                 '}';
     }
 }

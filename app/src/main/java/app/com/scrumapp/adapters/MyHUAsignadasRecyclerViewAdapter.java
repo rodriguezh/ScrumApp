@@ -1,6 +1,7 @@
 package app.com.scrumapp.adapters;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,19 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.ObservableSnapshotArray;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.activities.historiausuario.HistoriaUsuarioActivity;
-import app.com.scrumapp.fragments.HUAsignadasFragment.OnListFragmentInteractionListener;
+import app.com.scrumapp.fragments.huasignada.HUAsignadasFragment.OnListFragmentInteractionListener;
 import app.com.scrumapp.models.HistoriadeUsuario;
-
-
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
@@ -36,7 +33,16 @@ public class MyHUAsignadasRecyclerViewAdapter extends FirestoreRecyclerAdapter<H
         this.mListener = mListener;
     }
 
+    @NonNull
+    @Override
+    public ObservableSnapshotArray<HistoriadeUsuario> getSnapshots() {
+        return super.getSnapshots();
+    }
 
+    /**
+     *  DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
+     snapshot.getId();
+     */
     @Override
     public void startListening() {
         super.startListening();
@@ -48,7 +54,7 @@ public class MyHUAsignadasRecyclerViewAdapter extends FirestoreRecyclerAdapter<H
     }
 
     @Override
-    protected void onBindViewHolder(final ViewHolder viewHolder, int position, HistoriadeUsuario model) {
+    protected void onBindViewHolder(final ViewHolder viewHolder, final int position, HistoriadeUsuario model) {
         viewHolder.mItem=model;
         Log.e("---------->",model.toString());
         viewHolder.txtHistoria.setText("Historia de Usuario No "+model.getId_hu()+"");
@@ -62,7 +68,8 @@ public class MyHUAsignadasRecyclerViewAdapter extends FirestoreRecyclerAdapter<H
             @Override
             public void onClick(View v) {
                 Intent intento= new Intent(v.getContext(),HistoriaUsuarioActivity.class);
-                intento.putExtra(Constants.IDHU,viewHolder.mItem.getId_hu()+"");
+
+                intento.putExtra(Constants.IDHU,getSnapshots().getSnapshot(viewHolder.getAdapterPosition()).getId());
                 //Log.e("IDHU","no"+viewHolder.mItem.getIdHU());
                 v.getContext().startActivity(intento);
                 if (null != mListener) {

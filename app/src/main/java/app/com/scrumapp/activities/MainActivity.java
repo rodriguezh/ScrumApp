@@ -11,7 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
+import app.com.scrumapp.activities.Sprints.MainSprintsPresenter;
 import app.com.scrumapp.adapters.PagerAdapter;
 
 
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
+        Bundle bundle = getIntent().getExtras();
+
 
         //crea el tab layout y agrega el número de tabs con sus títulos
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         //crea el adaptador y lo que debe hacer en cada tab
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(),bundle);
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

@@ -11,25 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-
 import java.util.List;
 
+import app.com.scrumapp.Constants;
 import app.com.scrumapp.adapters.MyHistoriaUsuarioRecyclerViewAdapter;
 import app.com.scrumapp.R;
 
-import app.com.scrumapp.data.model.HistoriadeUsuarioInicial;
-import app.com.scrumapp.data.model.SprintBacklogResponse;
+import app.com.scrumapp.data.model.HUInicialResponse;
 import app.com.scrumapp.data.remote.retrofit.APIServiceSprintBacklog;
-import app.com.scrumapp.data.remote.retrofit.ApiUtils;
 import app.com.scrumapp.models.HistoriadeUsuario;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static android.content.ContentValues.TAG;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -74,7 +65,7 @@ public class HUInicialFragment extends Fragment implements HUInicialContract.Vie
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-      mPresenter= new HUInicialPresenter(this,1,1);
+         mPresenter= new HUInicialPresenter(this,getArguments().getInt(Constants.IDPROYECTO),getArguments().getInt(Constants.IDSPRINT));
         recyclerView = (RecyclerView)getActivity().findViewById(R.id.listhui);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -123,7 +114,7 @@ public class HUInicialFragment extends Fragment implements HUInicialContract.Vie
     }
 
     @Override
-    public void loadView(List<HistoriadeUsuarioInicial> list) {
+    public void loadView(List<HUInicialResponse> list) {
         Log.e("--->",list.toString());
         adapter=new MyHistoriaUsuarioRecyclerViewAdapter(list);
         recyclerView.setAdapter(adapter);

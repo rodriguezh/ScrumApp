@@ -25,6 +25,8 @@ public interface HistoriaUsuarioContract {
 
         void saveUserHistory (HistoriadeUsuario hu);
 
+        void createUserHistory (HistoriadeUsuario hu);
+
         void getUserHistory(String idHu);
 
         void getUsers();

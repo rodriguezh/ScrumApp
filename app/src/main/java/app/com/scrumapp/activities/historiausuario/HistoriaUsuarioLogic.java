@@ -21,6 +21,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -75,9 +76,46 @@ public class HistoriaUsuarioLogic implements HistoriaUsuarioILogic{
         });
     }
 
+    @Override
+    public void createUserHistory(HistoriadeUsuario hu, final CallBackResponse response) {
+        Map<String,Object> map= hu.toMap();
+        map.put("desarrollador",hu.getDesarrollador().toMap());
+        db.collection("HistoriadeUsuario").add(map)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        response.onSuccess("Historia creada","createUserHistory");
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        response.onSuccess("Historia no creada","createUserHistory");
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
     public void getUserHistory(String idHu, final CallBackResponse response) {
-        db.collection("HistoriadeUsuario")
-                .whereEqualTo("id_hu", Integer.parseInt(idHu))
+        db.collection("HistoriadeUsuario").document(idHu).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e);
+                    return;
+                }
+                HistoriadeUsuario hu;
+                hu = documentSnapshot.toObject(HistoriadeUsuario.class);
+                hu.setId(documentSnapshot.getId());
+                response.onSuccess(hu, "getUserHistory");
+                if (hu.getTiempoTranscurrido() != null) {
+                    // tiempoCronometro(hu.getTiempoTranscurrido());
+                }
+                //  mProfileView.loadView(hu);
+                Log.d(TAG, "oe " + documentSnapshot.toObject(HistoriadeUsuario.class).toString());
+            }});
+               /* .whereEqualTo("id_hu", Integer.parseInt(idHu))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,
@@ -119,7 +157,7 @@ public class HistoriaUsuarioLogic implements HistoriaUsuarioILogic{
                         }
 
                     }
-                });
+                });*/
     }
 
     public void getUsers(final CallBackResponse response) {

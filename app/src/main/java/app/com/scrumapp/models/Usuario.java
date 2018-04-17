@@ -1,5 +1,10 @@
 package app.com.scrumapp.models;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Usuario {
     private String identificacion;
     private String nombre;
@@ -37,6 +42,16 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("identificacion", identificacion);
+        result.put("nombre", nombre);
+        result.put("rol", rol);
+        return result;
+    }
+
 
     @Override
     public String toString() {

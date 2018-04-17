@@ -31,32 +31,24 @@ public class HistoriaUsuarioPresenter implements HistoriaUsuarioContract.Present
 
     @Override
     public void saveUserHistory(final HistoriadeUsuario hu) {
-
         logicHistoria.saveUserHistory(hu,this);
+    }
 
-       // mProfileView.showInfoMessage("Historia Actualizada");
-
+    @Override
+    public void createUserHistory(HistoriadeUsuario hu) {
+        logicHistoria.createUserHistory(hu,this);
     }
 
     @Override
     public void getUserHistory(String idHu) {
-
-        Log.e("---->",idHu);
-
        logicHistoria.getUserHistory(idHu,this);
-
-       /* if (historiaUsuario.getTiempoTranscurrido()!=null){
-            tiempoCronometro(historiaUsuario.getTiempoTranscurrido());
-        }
-        mProfileView.loadView(historiaUsuario);*/
 
     }
 
     @Override
     public void getUsers() {
        logicHistoria.getUsers(this);
-
-        mProfileView.setSpinnerUser(usuarios);
+        //mProfileView.setSpinnerUser(usuarios);
     }
 
     @Override
@@ -84,6 +76,9 @@ public class HistoriaUsuarioPresenter implements HistoriaUsuarioContract.Present
     public void onSuccess(Object object, String nameMethod) {
         switch (nameMethod){
             case "saveUserHistory":
+                mProfileView.showInfoMessage(object.toString());
+                break;
+            case "createUserHistory":
                 mProfileView.showInfoMessage(object.toString());
                 break;
             case "getUserHistory":

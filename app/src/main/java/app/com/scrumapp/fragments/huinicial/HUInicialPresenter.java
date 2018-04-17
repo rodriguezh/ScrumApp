@@ -3,7 +3,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import app.com.scrumapp.Constants;
-import app.com.scrumapp.data.model.HistoriadeUsuarioInicial;
+import app.com.scrumapp.data.model.HUInicialResponse;
 
 import app.com.scrumapp.data.remote.retrofit.APIServiceSprintBacklog;
 import app.com.scrumapp.data.remote.retrofit.ApiUtils;
@@ -18,7 +18,7 @@ public class HUInicialPresenter implements HUInicialContract.Presenter, CallBack
 
     private APIServiceSprintBacklog apiService;
 
-    private List<HistoriadeUsuarioInicial> historiadeUsuarioInicials;
+    private List<HUInicialResponse> historiadeUsuarioInicials;
 
 
     private LogicHUInicial logicHUInicial = LogicHUInicial.getIntance();
@@ -44,7 +44,7 @@ public class HUInicialPresenter implements HUInicialContract.Presenter, CallBack
 
     @Override
     public void onSuccess(Object object) {
-        mView.loadView((List<HistoriadeUsuarioInicial>) object);
+        mView.loadView((List<HUInicialResponse>) object);
     }
 
     @Override
