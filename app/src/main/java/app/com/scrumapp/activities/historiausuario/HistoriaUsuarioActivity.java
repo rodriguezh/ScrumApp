@@ -2,18 +2,11 @@ package app.com.scrumapp.activities.historiausuario;
 
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -23,24 +16,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.models.HistoriadeUsuario;
 import app.com.scrumapp.models.Usuario;
 import app.com.scrumapp.utils.Util;
+import android.text.TextUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -117,6 +100,9 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     }
 
+    public void msnCancelacion(String msj){
+        Toast.makeText(this, msj, Toast.LENGTH_SHORT).show();
+    }
 
     View.OnClickListener mStartListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -135,8 +121,15 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     View.OnClickListener mCancelarHU = new View.OnClickListener() {
         public void onClick(View v) {
-            mPresenter.saveUserHistory(actualizarHU(Constants.CANCEL));
-            chronometer.stop();
+            String motivo = edtMotivoCandelacion.getText().toString();
+
+            if(!TextUtils.isEmpty(motivo)){
+                mPresenter.saveUserHistory(actualizarHU(Constants.CANCEL));
+                chronometer.stop();
+            }else {
+                msnCancelacion("Debe ingresar motivo de cancelación");
+                return;
+            }
         }
     };
 
@@ -164,6 +157,18 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
 
     @Override
     public void loadView(HistoriadeUsuario hu) {
+
+        String estadoHU = hu.getEstado().toString();
+
+        if(estadoHU.equals(Constants.DONE) || estadoHU.equals(Constants.CANCEL)){
+            edtMotivoCandelacion.setEnabled(false);
+            edtinfAdicional.setEnabled(false);
+            btnCancelarTarea.setEnabled(false);
+            btnFinalizarTarea.setEnabled(false);
+            btnInciar.setEnabled(false);
+            btnDetener.setEnabled(false);
+        }
+
         keyHistoriaUsuario=hu.getId();
         txtNoHU.setText(hu.getId_hu()+"");
         txtProyecto.setText(hu.getId_proyecto()+"");

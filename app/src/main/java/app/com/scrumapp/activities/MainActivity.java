@@ -11,9 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import app.com.scrumapp.Constants;
+
 import app.com.scrumapp.R;
-import app.com.scrumapp.activities.Sprints.MainSprintsPresenter;
+
+import app.com.scrumapp.activities.login.LoginActivity;
+
 import app.com.scrumapp.adapters.PagerAdapter;
 
 

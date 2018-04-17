@@ -1,4 +1,4 @@
-package app.com.scrumapp.activities;
+package app.com.scrumapp.activities.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,14 +14,20 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import app.com.scrumapp.R;
+import app.com.scrumapp.activities.MainActivity;
+import app.com.scrumapp.models.Usuario;
 import app.com.scrumapp.utils.Util;
 
-public class LoginActivity extends AppCompatActivity {
+import com.google.gson.Gson;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class LoginActivity extends AppCompatActivity implements LoginContract.View {
     //prueba
 
     //lo siguiente permite crear las credenciales del usuario, guardar el usuario y contraseña si le da recordar
     private SharedPreferences prefs;
-
+    private LoginContract.Presenter mPresenter;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Switch switchRemember;
@@ -29,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mPresenter = LoginPresenter.getInstance(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -46,8 +53,8 @@ public class LoginActivity extends AppCompatActivity {
                 String password = editTextPassword.getText().toString();
 
                 if (login(email,password)){
-                    goToMain();
-                    saveOnPreferences(email,password);
+
+                    mPresenter.validateUser(email, password);
                 }
             }
         });
@@ -81,12 +88,15 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void saveOnPreferences(String email, String password){
+    private void saveOnPreferences(Usuario objUsuario){
         if(switchRemember.isChecked()){
+            Gson gson = new Gson();
             // permite escribir en el editor
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("email", email);
-            editor.putString("pass",password);
+            editor.putString("email", objUsuario.getEmail());
+            editor.putString("pass",objUsuario.getPassword());
+            editor.putString("usuario", gson.toJson(objUsuario.getPassword()));
+
             // para que la instrucción sea sincrona se coloca editr.commit() espera que termine todo lo anterior para continuar con la siguiente línea
             editor.apply();
         }
@@ -105,5 +115,26 @@ public class LoginActivity extends AppCompatActivity {
         //la siguiente instrucción permite que se cierre la sesión y la aplicación si se devuelve a la pantalla de login
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK  | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    public void keepDataLoggedUser(Usuario objUsuario) {
+        if(objUsuario == null){
+            Toast.makeText(this,"Email or Password is not valid, please try again",Toast.LENGTH_LONG).show();
+        }
+        else {
+            goToMain();
+            saveOnPreferences(objUsuario);
+        }
+    }
+
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mPresenter=checkNotNull(presenter);
+    }
+
+    @Override
+    public void showInfoMessage(String respuesta) {
+        Toast.makeText(this,respuesta,Toast.LENGTH_LONG).show();
     }
 }

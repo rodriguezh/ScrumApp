@@ -14,4 +14,10 @@ public class ApiUtils {
 
         return RetrofitClient.getClient(baseUrl).create(APIServiceProjects.class);
     }
+
+    public static APIServiceLogin getAPIServiceLogin(String baseUrl) {
+
+        return RetrofitClient.getClient(baseUrl).create(APIServiceLogin.class);
+
+    }
 }
