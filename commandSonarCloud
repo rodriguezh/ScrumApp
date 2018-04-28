@@ -1,3 +1,7 @@
+key:
+7adc8409b799e556765d083964610a859c40ac1b
+
+Command:
 ./gradlew sonarqube \
   -Dsonar.organization=biptor-github \
   -Dsonar.host.url=https://sonarcloud.io \
