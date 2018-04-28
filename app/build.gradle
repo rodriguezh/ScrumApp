@@ -49,5 +49,8 @@ dependencies {
 
 }
 
+plugins {
+  id "org.sonarqube" version "2.6"
+}
 
 apply plugin: 'com.google.gms.google-services'
