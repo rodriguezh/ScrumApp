@@ -1,0 +1,33 @@
+#----- Default SonarQube server
+sonar.host.url=http://sonar.smartcampus.uniajc.edu.co:9000
+
+# DATABASE
+# User credentials.
+sonar.jdbc.username=postgres
+sonar.jdbc.password=postgres
+
+#----- PostgreSQL 8.x/9.x
+sonar.jdbc.url=jdbc:postgresql://sonar.smartcampus.uniajc.edu.co:5432/sonar
+#sonar.jdbc.url=jdbc:postgresql://sonar.smartcampus.uniajc.edu.co:9000/sonar
+
+# required metadata
+sonar.projectKey=ctsandroid
+sonar.projectName=ctsandroid
+sonar.projectVersion=1.0.0
+
+sonar.projectBaseDir=/var/lib/jenkins/workspace/ctsuniajc/ctsandroid
+sonar.sourceEncoding=UTF-8
+ 
+# path to project binaries (optional), for example directory of Java bytecode
+sonar.java.binaries=gradle
+
+# path to source directories (required)
+sonar.sources=app/src/main
+ 
+# path to test source directories (optional)
+#sonar.java.tests=/ctsandroid/app/src/test/java/com/edu/uniajc
+ 
+# The value of the property must be the key of the language.
+sonar.language=java
+ 
+#sonar.profile=Android Lint
