@@ -13,8 +13,6 @@ import java.util.List;
 
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
-import app.com.scrumapp.activities.historiausuario.HistoriaUsuarioPresenter;
-import app.com.scrumapp.adapters.ProjectRecyclerViewAdapter;
 import app.com.scrumapp.adapters.SprintsRecyclerViewAdapter;
 import app.com.scrumapp.models.Sprint;
 
@@ -71,7 +69,7 @@ public class MainSprintsActivity extends AppCompatActivity implements MainSprint
 
     @Override
     public void setRecycler(List<Sprint> sprints) {
-        mySprintRecyclerViewAdapter=new SprintsRecyclerViewAdapter(sprints);
+        //mySprintRecyclerViewAdapter=new SprintsRecyclerViewAdapter(sprints, mListener);
         recyclerView.setAdapter(mySprintRecyclerViewAdapter);
     }
 }

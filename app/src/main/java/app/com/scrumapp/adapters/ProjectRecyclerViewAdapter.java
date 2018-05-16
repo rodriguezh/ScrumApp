@@ -12,6 +12,7 @@ import java.util.List;
 import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 import app.com.scrumapp.activities.Sprints.MainSprintsActivity;
+import app.com.scrumapp.activities.proyectos.ProjectsFragment;
 import app.com.scrumapp.models.Proyecto;
 
 /**
@@ -22,9 +23,10 @@ import app.com.scrumapp.models.Proyecto;
 public class ProjectRecyclerViewAdapter extends RecyclerView.Adapter<ProjectRecyclerViewAdapter.ViewHolder> {
 
     private final List<Proyecto> mValues;
-
-    public ProjectRecyclerViewAdapter(List<Proyecto> items) {
+    private final ProjectsFragment.OnListFragmentInteractionListener mListener;
+    public ProjectRecyclerViewAdapter(List<Proyecto> items, ProjectsFragment.OnListFragmentInteractionListener mListener) {
         mValues = items;
+        this.mListener = mListener;
     }
 
     @Override
@@ -43,9 +45,14 @@ public class ProjectRecyclerViewAdapter extends RecyclerView.Adapter<ProjectRecy
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),MainSprintsActivity.class);
+               /* Intent intent = new Intent(v.getContext(),MainSprintsActivity.class);
                 intent.putExtra(Constants.IDPROYECTO,holder.mItem.getId());
-                v.getContext().startActivity(intent);
+                v.getContext().startActivity(intent);*/
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onListFragmentInteraction(holder.mItem);
+                }
             }
         });
 

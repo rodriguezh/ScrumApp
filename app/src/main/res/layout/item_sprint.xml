@@ -56,6 +56,64 @@
                     android:textSize="18dp" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:autoLink="web"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Duracion"
+                    android:textColorLink="#5279f7"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/txtDias"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+
+                    android:textColorLink="#5279f7"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:autoLink="web"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Peso"
+                    android:textColorLink="#5279f7"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/txtPeso"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+
+                    android:textColorLink="#5279f7"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,18 +132,19 @@
                     android:textColorLink="#5279f7"
                     android:textSize="18dp" />
                 <TextView
-                    android:id="@+id/stateSprint"
+                    android:id="@+id/txtstate"
                     android:layout_width="0dp"
                     android:layout_weight="2"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:autoLink="web"
-                    android:ellipsize="end"
-                    android:maxLines="1"
+
                     android:textColorLink="#5279f7"
                     android:textSize="18dp" />
 
             </LinearLayout>
+
+
+
         </LinearLayout>
 
 

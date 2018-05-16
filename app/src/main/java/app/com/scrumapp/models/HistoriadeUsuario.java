@@ -19,7 +19,7 @@ public class HistoriadeUsuario {
      private String prioridad;
      private double tiempoEstimado;
      private String estado;
-     private String tiempoTranscurrido;
+     private int tiempoTranscurrido;
      private String fechaInicio;
      private String fechaFin;
      private String informacionadicional;
@@ -27,7 +27,7 @@ public class HistoriadeUsuario {
      private Usuario desarrollador;
      private boolean asignada;
 
-    public HistoriadeUsuario(int id_hu, int id_proyecto, int id_sprint, String descripcion, String criterio_aceptacion, int esfuerzo, String prioridad, double tiempoEstimado, String estado, String tiempoTranscurrido, String fechaInicio, String fechaFin, String informacionadicional, String motivocancelacion, Usuario desarrollador) {
+    public HistoriadeUsuario(int id_hu, int id_proyecto, int id_sprint, String descripcion, String criterio_aceptacion, int esfuerzo, String prioridad, double tiempoEstimado, String estado, int tiempoTranscurrido, String fechaInicio, String fechaFin, String informacionadicional, String motivocancelacion, Usuario desarrollador) {
         this.id_hu = id_hu;
         this.id_proyecto = id_proyecto;
         this.id_sprint = id_sprint;
@@ -137,10 +137,32 @@ public class HistoriadeUsuario {
     }
 
     public String getTiempoTranscurrido() {
-        return tiempoTranscurrido;
+
+        String tiempo="", hora="", min="", seg="";
+
+        int horas = (tiempoTranscurrido / 3600);
+        int minutos = ((tiempoTranscurrido-horas*3600)/60);
+        int segundos = tiempoTranscurrido-(horas*3600+minutos*60);
+        hora=""+horas; min=""+minutos ; seg=""+segundos;
+
+        if(horas<9){
+            hora="0"+horas;
+        }
+        if(minutos<9){
+            min="0"+minutos;
+        }
+        if(segundos<9){
+            seg="0"+segundos;
+        }
+
+        if(horas>0){
+            return hora+":"+min+":"+seg;
+        }else{
+            return min+":"+seg;
+        }
     }
 
-    public void setTiempoTranscurrido(String tiempoTranscurrido) {
+    public void setTiempoTranscurrido(int tiempoTranscurrido) {
         this.tiempoTranscurrido = tiempoTranscurrido;
     }
 

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +13,10 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import app.com.scrumapp.R;
-import app.com.scrumapp.activities.MainActivity;
-import app.com.scrumapp.models.Usuario;
+
+import app.com.scrumapp.activities.proyectos.MainProjectsActivity;
+import app.com.scrumapp.data.model.Userlogin;
+
 import app.com.scrumapp.utils.Util;
 
 import com.google.gson.Gson;
@@ -88,22 +89,23 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return true;
     }
 
-    private void saveOnPreferences(Usuario objUsuario){
+    private void saveOnPreferences(Userlogin objUsuario){
         if(switchRemember.isChecked()){
             Gson gson = new Gson();
             // permite escribir en el editor
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("email", objUsuario.getEmail());
-            editor.putString("pass",objUsuario.getPassword());
-            editor.putString("usuario", gson.toJson(objUsuario.getPassword()));
-
+            editor.putString("id", (objUsuario.getId()+""));
+            editor.putString("pass",objUsuario.getClave());
+            editor.putString("usuario", objUsuario.getUsuario());
+            editor.putString("rol", objUsuario.getRol());
             // para que la instrucción sea sincrona se coloca editr.commit() espera que termine todo lo anterior para continuar con la siguiente línea
             editor.apply();
         }
     }
 
     private boolean isValidEmail(String email){
-        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        //return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        return !TextUtils.isEmpty(email);
     }
 
     private boolean isValidPassword(String password){
@@ -111,14 +113,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void goToMain(){
-        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this,MainProjectsActivity.class);
         //la siguiente instrucción permite que se cierre la sesión y la aplicación si se devuelve a la pantalla de login
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK  | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
     @Override
-    public void keepDataLoggedUser(Usuario objUsuario) {
+    public void keepDataLoggedUser(Userlogin objUsuario) {
         if(objUsuario == null){
             Toast.makeText(this,"Email or Password is not valid, please try again",Toast.LENGTH_LONG).show();
         }
@@ -127,6 +129,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             saveOnPreferences(objUsuario);
         }
     }
+
+
 
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {

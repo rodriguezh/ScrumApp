@@ -1,6 +1,7 @@
 package app.com.scrumapp.fragments.huasignada;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,23 +20,27 @@ import app.com.scrumapp.R;
 import app.com.scrumapp.adapters.MyHUAsignadasRecyclerViewAdapter;
 import app.com.scrumapp.models.HistoriadeUsuario;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HUAsignadasFragment extends Fragment {
+public class HUAsignadasFragment extends Fragment implements HUAsignadaContract.View{
 
-    // TODO: Customize parameter argument names
+
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
+
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private DatabaseReference mFirebaseDatabaseReference;
     private RecyclerView recyclerView;
     private MyHUAsignadasRecyclerViewAdapter adapter;
     private LinearLayoutManager mLinearLayoutManager;
+    private HUAsignadaContract.Presenter mPresenter;
+    private SharedPreferences sharedPreferences;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -43,7 +48,7 @@ public class HUAsignadasFragment extends Fragment {
     public HUAsignadasFragment() {
     }
 
-    // TODO: Customize parameter initialization
+
     @SuppressWarnings("unused")
     public static HUAsignadasFragment newInstance(int columnCount) {
         HUAsignadasFragment fragment = new HUAsignadasFragment();
@@ -73,10 +78,21 @@ public class HUAsignadasFragment extends Fragment {
         mLinearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
+        sharedPreferences = getActivity().getSharedPreferences("Preferences",MODE_PRIVATE);
+        String rol=sharedPreferences.getString("rol", "");
+        String identificacion=sharedPreferences.getString("id", "");
+        //mPresenter= new HUAsignadaPresenter(this,getArguments().getInt(Constants.IDPROYECTO),getArguments().getInt(Constants.IDSPRINT));
+        Query query;
+        if (rol.equals("Developer")){
+            query = FirebaseFirestore.getInstance()
+                    .collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo("id_proyecto",getArguments().getInt(Constants.IDPROYECTO)).whereEqualTo("id_sprint",getArguments().getInt(Constants.IDSPRINT))
+                   .whereEqualTo("desarrollador.identificacion",identificacion);
+        }else{
+            query = FirebaseFirestore.getInstance()
+                     .collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo("id_proyecto",getArguments().getInt(Constants.IDPROYECTO)).whereEqualTo("id_sprint",getArguments().getInt(Constants.IDSPRINT));
+                    //.collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo("desarrollador.nombre","Karen");
+        }
 
-        Query query = FirebaseFirestore.getInstance()
-                .collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo("id_proyecto",getArguments().getInt(Constants.IDPROYECTO)).whereEqualTo("id_sprint",getArguments().getInt(Constants.IDSPRINT));
-                //.collection(Constants.COLLECTIONHISTORIAUSUARIO).whereEqualTo(Constants.CAMPOFILTROHU,true);
 
 
         FirestoreRecyclerOptions<HistoriadeUsuario> options =
@@ -116,6 +132,23 @@ public class HUAsignadasFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void setPresenter(HUAsignadaContract.Presenter presenter) {
+
+    }
+
+    @Override
+    public void showInfoMessage(String respuesta) {
+
+    }
+
+    @Override
+    public void loadView(FirestoreRecyclerOptions<HistoriadeUsuario> options) {
+        adapter=new MyHUAsignadasRecyclerViewAdapter( options, mListener);
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 
     /**

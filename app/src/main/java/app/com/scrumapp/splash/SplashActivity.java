@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import app.com.scrumapp.activities.login.LoginActivity;
-import app.com.scrumapp.activities.MainActivity;
+
+import app.com.scrumapp.activities.proyectos.MainProjectsActivity;
+
 import app.com.scrumapp.utils.Util;
 
 public class SplashActivity extends AppCompatActivity {
@@ -22,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         Intent intentLogin = new Intent(this,LoginActivity.class);
-        Intent intentMain = new Intent(this, MainActivity.class);
+        Intent intentMain = new Intent(this, MainProjectsActivity.class);
 
         if(!TextUtils.isEmpty(Util.getUserMailPrefs(prefs)) && !TextUtils.isEmpty(Util.getUserPassPrefs(prefs)) ){
             startActivity(intentMain);

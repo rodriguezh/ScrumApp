@@ -31,5 +31,7 @@ public interface HistoriaUsuarioContract {
 
         void getUsers();
 
+        int timetoSeg(String time);
+
     }
 }

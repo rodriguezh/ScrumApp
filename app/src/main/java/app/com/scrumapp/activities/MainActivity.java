@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+import app.com.scrumapp.Constants;
 import app.com.scrumapp.R;
 
 import app.com.scrumapp.activities.login.LoginActivity;
@@ -22,7 +23,8 @@ import app.com.scrumapp.adapters.PagerAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
-
+    public static int peso;
+    public static int dias;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
+        peso=bundle.getInt(Constants.PESO);
+        dias=bundle.getInt(Constants.DIAS);
 
         //crea el tab layout y agrega el número de tabs con sus títulos
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -80,10 +84,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_logout:
                 logOut();
                 return true;
-            case R.id.menu_forget_logout:
-                removeSharedPreferences();
-                logOut();
-                return true;
             default:
                 return onOptionsItemSelected(item);
         }
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void logOut(){
         Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-        //borrar todo el historial apenas salga de la sesión por seguridad
+        //borrar  el historial apenas salga de la sesión por seguridad
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK  | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

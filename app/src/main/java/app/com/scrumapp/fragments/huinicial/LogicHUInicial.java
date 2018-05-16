@@ -2,10 +2,14 @@ package app.com.scrumapp.fragments.huinicial;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.content.ContentValues.TAG;
 
 import app.com.scrumapp.Constants;
 
+import app.com.scrumapp.data.model.HUInicialResponse;
 import app.com.scrumapp.data.model.SprintBacklogResponse;
 import app.com.scrumapp.data.remote.retrofit.APIServiceSprintBacklog;
 import app.com.scrumapp.data.remote.retrofit.ApiUtils;
@@ -48,6 +52,7 @@ public class LogicHUInicial implements  ILogicHUInicial {
             public void onFailure(Call<SprintBacklogResponse> call, Throwable t) {
                 Log.e(TAG, "Unable to submit post to API." + t.toString());
                 callBackResponse.onnError(t.getMessage());
+                callBackResponse.onSuccess(new ArrayList<HUInicialResponse>());
             }
         });
 

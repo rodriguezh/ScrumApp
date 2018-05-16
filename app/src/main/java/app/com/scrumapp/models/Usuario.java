@@ -1,17 +1,30 @@
 package app.com.scrumapp.models;
 
 import com.google.firebase.database.Exclude;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Usuario {
+    @SerializedName("Id")
+    @Expose
     private String identificacion;
+    @SerializedName("nombre")
+    @Expose
     private String nombre;
     private String rol;
+    @SerializedName("correo")
+    @Expose
     private String email;
+    @SerializedName("clave")
+    @Expose
     private String password;
+    @SerializedName("id_proyecto")
+    @Expose
     private int idProyecto;
+
 
     public Usuario(String identificacion, String nombre, String rol) {
         this.identificacion = identificacion;

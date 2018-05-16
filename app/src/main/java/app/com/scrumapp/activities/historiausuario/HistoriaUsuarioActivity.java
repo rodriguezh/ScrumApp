@@ -202,6 +202,8 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
         chronometer.setBase(SystemClock.elapsedRealtime() - (min * 60000 + seg * 1000));
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menusave, menu);
@@ -218,11 +220,12 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.navigation_save:
-                if(tipoForm==Constants.FORMASSIGN){
+               if(tipoForm==Constants.FORMASSIGN){
                     mPresenter.createUserHistory(asignar());
                 }else{
                     mPresenter.saveUserHistory(actualizarHU(""));
                 }
+
                break;
         }
         return super.onOptionsItemSelected(item);
@@ -248,7 +251,7 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
         HistoriadeUsuario hu = new HistoriadeUsuario();
         hu.setId(keyHistoriaUsuario);
         hu.setInformacionadicional(edtinfAdicional.getText().toString());
-        hu.setTiempoTranscurrido(chronometer.getText().toString());
+        hu.setTiempoTranscurrido(mPresenter.timetoSeg(chronometer.getText().toString()));
         hu.setDesarrollador((Usuario)spinnerUsers.getSelectedItem());
         if(fechaInicial==null){
             hu.setFechaInicio(Util.formatFechaActual());

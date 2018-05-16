@@ -13,13 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.MainActivity" />
-
-        <activity android:name=".activities.login.LoginActivity"></activity>
-
+        <activity android:name=".activities.login.LoginActivity" />
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.historiausuario.HistoriaUsuarioActivity"
@@ -28,22 +30,11 @@
         <activity
             android:name=".activities.proyectos.MainProjectsActivity"
             android:label="@string/title_activity_main_projects"
-            android:theme="@style/AppTheme" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".activities.Sprints.MainSprintsActivity"
             android:label="@string/title_activity_main_sprints"
-            android:theme="@style/AppTheme">
-
-
-
-        </activity>
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

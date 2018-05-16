@@ -15,7 +15,8 @@ public class Constants {
     public static String CAMPOFILTROHU="asignada";
     public static String IDPROYECTO="IdPB";
     public static String IDSPRINT="IdSPrint";
-
+    public static String PESO="peso";
+    public static String DIAS="dias";
 
     public static String ESTADO="Estado";
     public static String ESFUERZO="Esfuerzo";
@@ -23,9 +24,11 @@ public class Constants {
     public static String CRITERIOSACEPTACION="Criterios";
     public static String PRIORIDAD="Prioridad";
 
-    public static String BASE_URLLOGIN = "https://apex.oracle.com/";
+
 
   //  public static String BASE_URLSPRINTB = "https://apex.oracle.com/";
     public static String BASE_URLPROJECTS ="http://pbacklog-pbacklog.1d35.starter-us-east-1.openshiftapps.com/";
     public static String BASE_URLSPRINTB = "http://192.168.0.12:8080/";
+    public static String BASEURLLOGIN="http://13.59.84.254:8000/";
+
 }

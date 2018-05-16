@@ -6,4 +6,6 @@
     <string name="title_activity_historia_usuario">HistoriaUsuarioActivity</string>
     <string name="title_activity_main_projects">MainProjectsActivity</string>
     <string name="title_activity_main_sprints">MainSprintsActivity</string>
+    <string name="title_activity_main_proj">MainProjActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

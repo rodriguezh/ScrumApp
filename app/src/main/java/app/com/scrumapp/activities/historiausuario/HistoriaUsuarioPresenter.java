@@ -2,6 +2,7 @@ package app.com.scrumapp.activities.historiausuario;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 
@@ -26,7 +27,6 @@ public class HistoriaUsuarioPresenter implements HistoriaUsuarioContract.Present
         this.mProfileView = mProfileView;
         this.idHu = idHu;
         usuarios= new ArrayList<>();
-
     }
 
     @Override
@@ -49,6 +49,26 @@ public class HistoriaUsuarioPresenter implements HistoriaUsuarioContract.Present
     public void getUsers() {
        logicHistoria.getUsers(this);
         //mProfileView.setSpinnerUser(usuarios);
+    }
+
+    @Override
+    public int timetoSeg(String chronoText) {
+
+            int stoppedMilliseconds = 0;
+
+            String array[] = chronoText.split(":");
+            if (array.length == 2) {
+                stoppedMilliseconds = Integer.parseInt(array[0]) * 60 * 1000
+                        + Integer.parseInt(array[1]) * 1000;
+            } else if (array.length == 3) {
+                stoppedMilliseconds = Integer.parseInt(array[0]) * 60 * 60 * 1000
+                        + Integer.parseInt(array[1]) * 60 * 1000
+                        + Integer.parseInt(array[2]) * 1000;
+            }
+
+        return stoppedMilliseconds/1000;
+
+
     }
 
     @Override

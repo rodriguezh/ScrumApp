@@ -34,7 +34,7 @@ public class HUInicialPresenter implements HUInicialContract.Presenter, CallBack
     @Override
     public void getUsesrHistory(int id_pb, int id_sprint) {
 
-        logicHUInicial.list(1,1,this);
+        logicHUInicial.list(id_pb,id_sprint,this);
     }
 
     @Override

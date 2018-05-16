@@ -8,7 +8,7 @@ import java.util.Calendar;
 public class Util {
 
     public static String getUserMailPrefs(SharedPreferences preferences){
-        return preferences.getString("email","");
+        return preferences.getString("id","");
     }
 
     public static String getUserPassPrefs(SharedPreferences preferences){

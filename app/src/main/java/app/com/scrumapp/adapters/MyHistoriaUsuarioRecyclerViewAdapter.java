@@ -29,7 +29,9 @@ public class MyHistoriaUsuarioRecyclerViewAdapter extends RecyclerView.Adapter<M
         mValues = items;
     }
 
-
+    public void clear(){
+        mValues.clear();
+    }
 
 /*
     @Override

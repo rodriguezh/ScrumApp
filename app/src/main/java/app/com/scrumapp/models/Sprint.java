@@ -33,6 +33,11 @@ public class Sprint {
     @SerializedName("total_peso")
     @Expose
     private int total_peso;
+
+    @SerializedName("dias_sprint")
+    @Expose
+    private int dias_sprint;
+
     public Sprint() {
         super();
     }
@@ -93,6 +98,13 @@ public class Sprint {
         this.total_peso = total_peso;
     }
 
+    public int getDias_sprint() {
+        return dias_sprint;
+    }
+
+    public void setDias_sprint(int dias_sprint) {
+        this.dias_sprint = dias_sprint;
+    }
 
     @Override
     public String toString() {

@@ -5,10 +5,16 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import app.com.scrumapp.Constants;
+import app.com.scrumapp.activities.MainActivity;
+import app.com.scrumapp.data.model.Userlogin;
 import app.com.scrumapp.data.remote.retrofit.APIServiceSprintBacklog;
+import app.com.scrumapp.data.remote.retrofit.APIServiceUsers;
 import app.com.scrumapp.data.remote.retrofit.ApiUtils;
 import app.com.scrumapp.models.HistoriadeUsuario;
 import app.com.scrumapp.models.Usuario;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +32,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -37,10 +46,12 @@ public class HistoriaUsuarioLogic implements HistoriaUsuarioILogic{
     private static HistoriaUsuarioLogic instance = null;
     private final FirebaseFirestore db;
     private APIServiceSprintBacklog apiService;
+    private APIServiceUsers apiServiceUsers;
     private DatabaseReference mFirebaseDatabaseReference;
 
     protected HistoriaUsuarioLogic(){
         apiService = ApiUtils.getAPIService(Constants.BASE_URLSPRINTB);
+        apiServiceUsers= ApiUtils.getAPIServiceUsers(Constants.BASEURLLOGIN);
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -78,8 +89,11 @@ public class HistoriaUsuarioLogic implements HistoriaUsuarioILogic{
 
     @Override
     public void createUserHistory(HistoriadeUsuario hu, final CallBackResponse response) {
+        hu.setTiempoEstimado(((MainActivity.dias*8)*hu.getEsfuerzo())/MainActivity.peso);
         Map<String,Object> map= hu.toMap();
-        map.put("desarrollador",hu.getDesarrollador().toMap());
+        Usuario usuario=hu.getDesarrollador();
+        usuario.setRol("Developer");
+        map.put("desarrollador",usuario.toMap());
         db.collection("HistoriadeUsuario").add(map)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -109,90 +123,24 @@ public class HistoriaUsuarioLogic implements HistoriaUsuarioILogic{
                 hu = documentSnapshot.toObject(HistoriadeUsuario.class);
                 hu.setId(documentSnapshot.getId());
                 response.onSuccess(hu, "getUserHistory");
-                if (hu.getTiempoTranscurrido() != null) {
-                    // tiempoCronometro(hu.getTiempoTranscurrido());
-                }
-                //  mProfileView.loadView(hu);
                 Log.d(TAG, "oe " + documentSnapshot.toObject(HistoriadeUsuario.class).toString());
             }});
-               /* .whereEqualTo("id_hu", Integer.parseInt(idHu))
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "listen:error", e);
-                            return;
-                        }
-                        HistoriadeUsuario hu;
 
-                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    hu = dc.getDocument().toObject(HistoriadeUsuario.class);
-                                    hu.setId(dc.getDocument().getId());
-                                    response.onSuccess(hu,"getUserHistory");
-                                    if (hu.getTiempoTranscurrido()!=null){
-                                       // tiempoCronometro(hu.getTiempoTranscurrido());
-                                    }
-                                  //  mProfileView.loadView(hu);
-                                    Log.d(TAG,  "oe "+dc.getDocument().toObject(HistoriadeUsuario.class).toString());
-                                    break;
-                                case MODIFIED:
-                                    hu = dc.getDocument().toObject(HistoriadeUsuario.class);
-                                    hu.setId(dc.getDocument().getId());
-
-                                    response.onSuccess(hu,"getUserHistory");
-                                    if (hu.getTiempoTranscurrido()!=null){
-                                       // tiempoCronometro(hu.getTiempoTranscurrido());
-
-                                    }
-                                    //mProfileView.loadView(hu);
-                                    Log.d(TAG, "Modified : " + dc.getDocument().toObject(HistoriadeUsuario.class).toString());
-                                    break;
-                                case REMOVED:
-                                    Log.d(TAG, "Removed city: " + dc.getDocument().getData());
-                                    break;
-                            }
-                        }
-
-                    }
-                });*/
     }
 
-    public void getUsers(final CallBackResponse response) {
-        final ArrayList<Usuario> usuarios = new ArrayList<>();
+    public void getUsers(final CallBackResponse callresponse) {
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Usuario");
-        mFirebaseDatabaseReference.orderByChild("nombre").addChildEventListener(new ChildEventListener() {
+        apiServiceUsers.getUsers("macs6367","1").enqueue(new Callback<ArrayList<Usuario>>() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Usuario usuario = dataSnapshot.getValue(Usuario.class);
-                Log.e("Usuarios", usuario.toString());
-                Log.e("Usuarios", "dato " +s);
+            public void onResponse(Call<ArrayList<Usuario>> call, Response<ArrayList<Usuario>> response) {
+               // ArrayList<Usuario> usuarios1=((ArrayList<Usuario>) response.body());
 
-                usuarios.add(usuario);
-                response.onSuccess(usuarios,"getUsers");
+                callresponse.onSuccess(response.body(),"getUsers");
 
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onFailure(Call<ArrayList<Usuario>> call, Throwable t) {
 
             }
         });

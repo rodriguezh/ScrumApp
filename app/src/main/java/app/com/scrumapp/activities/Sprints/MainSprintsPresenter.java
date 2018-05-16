@@ -23,19 +23,19 @@ import retrofit2.Response;
  * Created by Fernando on 15/04/2018.
  */
 
-public class MainSprintsPresenter implements MainSprintsContract.Presenter{
+public class MainSprintsPresenter implements MainSprintsContract.Presenter, CallBackResponse{
 
     private static final String TAG = "MainProjectsPresenter";
     @NonNull
     private final MainSprintsContract.View view;
 
-    private APIServiceSprintBacklog apiService;
+    MainSprintsLogic mainSprintLogic = MainSprintsLogic.getIntance();
 
     private int id_proyecto;
 
     public MainSprintsPresenter(@NonNull MainSprintsContract.View view, int id_proyecto) {
         this.view = view;
-        this.apiService  = ApiUtils.getAPIService(Constants.BASE_URLSPRINTB);
+
         this.id_proyecto=id_proyecto;
     }
 
@@ -46,26 +46,16 @@ public class MainSprintsPresenter implements MainSprintsContract.Presenter{
 
     @Override
     public void getSprints(int id_proyecto) {
-        apiService.getSprints(id_proyecto).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()) {
-                    try {
-                       view.setRecycler(response.body().getMessage());
-                    }catch (Exception e){
-                        view.showInfoMessage("No es posible consular la informacion");
-                    }
-                    Log.i(TAG, "post submitted to API  222  " + response.body().getMessage().get(0).getNombre_pb());
-                }else{
-                    Log.e(TAG, "Unable to submit post to API." + response.message());
-                }
-            }
+        mainSprintLogic.getSprints(id_proyecto,this);
+    }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e(TAG, "Unable to get to API." + t.getMessage());
-                view.showInfoMessage("No es posible consular la informacion");
-            }
-        });
+    @Override
+    public void onSuccess(Object object, String nameMethod) {
+        view.setRecycler((List<Sprint>) object);
+    }
+
+    @Override
+    public void onnError(Object object) {
+        view.showInfoMessage(object.toString());
     }
 }

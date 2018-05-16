@@ -5,4 +5,6 @@ package app.com.scrumapp.activities.Sprints;
  */
 
 public interface MainSprintsILogic {
+
+    void getSprints(int id_proyecto, CallBackResponse responses);
 }
