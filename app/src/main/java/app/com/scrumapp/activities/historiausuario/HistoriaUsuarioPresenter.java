@@ -97,6 +97,7 @@ public class HistoriaUsuarioPresenter implements HistoriaUsuarioContract.Present
         switch (nameMethod){
             case "saveUserHistory":
                 mProfileView.showInfoMessage(object.toString());
+                logicHistoria.getUserHistory(idHu,this);
                 break;
             case "createUserHistory":
                 mProfileView.showInfoMessage(object.toString());

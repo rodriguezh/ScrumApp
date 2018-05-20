@@ -86,6 +86,7 @@ public class HistoriaUsuarioActivity extends AppCompatActivity implements Histor
             txtPrioridad.setText("Prioridad: "+bundle.getInt(Constants.PRIORIDAD));
             edtDescripcion.setText(bundle.getString(Constants.DESCRIPCION));
             edtCriteriosAceptacion.setText(bundle.getString(Constants.CRITERIOSACEPTACION));
+            linearLayout.setVisibility(View.GONE);
             tipoForm=Constants.FORMASSIGN;
         }else{
             idHU=bundle.getString(Constants.IDHU);

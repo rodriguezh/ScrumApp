@@ -59,7 +59,7 @@ public class LoginLogic implements LoginILogic {
             @Override
             public void onFailure(Call<ArrayList<Userlogin>> call, Throwable t) {
                 Log.e(TAG, "Unable to submit post to API." + t.toString());
-                callBackResponse.onnError(t.getMessage());
+                callBackResponse.onnError("No es posible iniciar sesion, verifique credenciales");
                 //callBackResponse.onSuccess(new ArrayList<HUInicialResponse>(),"validateUser");
             }
         });

@@ -28,7 +28,7 @@ public class Constants {
 
   //  public static String BASE_URLSPRINTB = "https://apex.oracle.com/";
     public static String BASE_URLPROJECTS ="http://pbacklog-pbacklog.1d35.starter-us-east-1.openshiftapps.com/";
-    public static String BASE_URLSPRINTB = "http://192.168.0.12:8080/";
+    public static String BASE_URLSPRINTB = "http://13.58.215.68:8089/";
     public static String BASEURLLOGIN="http://13.59.84.254:8000/";
 
 }
